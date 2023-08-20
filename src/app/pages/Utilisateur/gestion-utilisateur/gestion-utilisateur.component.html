@@ -16,11 +16,11 @@
         <div class="page-header-breadcrumb">
           <ul class="breadcrumb-title">
             <li class="breadcrumb-item" style="float: left;">
-              <a href="../index-2.html"> <i class="feather icon-home"></i> </a>
+              <a routerLink="/base/#"> <i class="feather icon-home"></i> </a>
             </li>
-            <li class="breadcrumb-item" style="float: left;"><a href="#!">Data Table</a>
+            <li class="breadcrumb-item" style="float: left;"><a href="#!">Gestion des Utilisateurs</a>
             </li>
-            <li class="breadcrumb-item" style="float: left;"><a href="#!">Styling</a>
+            <li class="breadcrumb-item" style="float: left;"><a href="#!">Utilisateurs</a>
             </li>
           </ul>
         </div>
@@ -34,7 +34,7 @@
     <div class="card">
       <div class="card-header">
         <h5>Liste des Utilisateurs</h5>
-        <button type="button" class="Plug-right btn btn-inverse float-right" data-toggle="modal"
+        <button type="button" class="Plug-right btn btn-grd-inverse float-right" data-toggle="modal"
           data-target="#myModal">
           <i class="feather icon-plus"></i>
           Nouvel Utilisateur</button>
@@ -49,7 +49,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
               </div>
               <div class="container"></div>
-              <form>
+              <form [formGroup]="formUser">
                 <div class="modal-body">
                   <div class="card">
                     <div class="card-block">
@@ -57,7 +57,7 @@
                         <label class="col-sm-3 col-form-label">Nom
                         </label>
                         <div class="col-sm-9">
-                          <input type="text" class="form-control" (ngModel)="data.Lastname" placeholder="nom ici..." required>
+                          <input type="text" class="form-control" formControlName="lastname" placeholder="nom ici..." required>
                           <span class="messages"></span>
                         </div>
                       </div>
@@ -65,7 +65,7 @@
                         <label class="col-sm-3 col-form-label">Prénom
                         </label>
                         <div class="col-sm-9">
-                          <input type="text" class="form-control" (ngModel)="data.Firstname"
+                          <input type="text" class="form-control" formControlName="firstname"
                             placeholder="prenom ici..." required>
                           <span class="messages"></span>
                         </div>
@@ -73,7 +73,7 @@
                       <div class="form-group row">
                         <label class="col-sm-3 col-form-label">Email</label>
                         <div class="col-sm-9">
-                          <input type="email" class="form-control" (ngModel)="data.email"
+                          <input type="email" class="form-control" formControlName="email"
                             placeholder="email ici..." required>
                           <span class="messages"></span>
                         </div>
@@ -83,9 +83,8 @@
                         <label class="col-sm-3 col-form-label">Profil
                         </label>
                         <div class="col-sm-9">
-                          <select class="form-control" (ngModel)="data.profil" required>
-                            <option>USER</option>
-                            <option>ADMIN</option>
+                          <select class="form-control" formControlName="role" required>
+                            <option *ngFor="let profil of listeProfils" [value]="profil.codeProfil">{{profil.libelle}}</option>
                           </select>
                           <span class="messages"></span>
                         </div>
@@ -94,14 +93,19 @@
                   </div>
 
                 </div>
-                <div class="modal-footer"> <a href="#" data-dismiss="modal" class="btn">Annuler</a>
-                  <button type="Submit" (click)="envoyer()" class="btn btn-primary">Valider
+                <div class="modal-footer"> <a href="#" data-dismiss="modal" class="btn btn-danger">
+
+                  Annuler</a>
+                  <button type="Submit" data-dismiss="modal" (click)="envoyer()" class="btn btn-success">
+
+                    Valider
                   </button>
                 </div>
               </form>
             </div>
           </div>
         </div>
+
 
         <div class="modal fade" id="editer">
           <div class="modal-dialog">
@@ -111,7 +115,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
               </div>
               <div class="container"></div>
-              <form id="main" novalidate>
+              <form [formGroup]="formEdit">
                 <div class="modal-body">
                   <div class="card">
                     <div class="card-block">
@@ -119,7 +123,7 @@
                         <label class="col-sm-3 col-form-label">Nom
                         </label>
                         <div class="col-sm-9">
-                          <input type="text" class="form-control" name="name" id="name" placeholder="nom ici...">
+                          <input type="text" class="form-control" formControlName="lastname" placeholder="nom ici...">
                           <span class="messages"></span>
                         </div>
                       </div>
@@ -127,7 +131,7 @@
                         <label class="col-sm-3 col-form-label">Prénom
                         </label>
                         <div class="col-sm-9">
-                          <input type="text" class="form-control" name="prenom" id="name"
+                          <input type="text" class="form-control" formControlName="firstname" id="name"
                             placeholder="prenom ici...">
                           <span class="messages"></span>
                         </div>
@@ -136,45 +140,28 @@
                         <label class="col-sm-3 col-form-label">Profil
                         </label>
                         <div class="col-sm-9">
-                          <select class="form-control" name="profil" id="name">
-                            <option>ADMIN</option>
-                            <option>USER</option>
+                          <select class="form-control" formControlName="role" id="name">
+                            <option *ngFor="let profil of listeProfils" [value]="profil.codeProfil">{{profil.libelle}}</option>
                           </select>
                           <span class="messages"></span>
                         </div>
                       </div>
-                      <div class="row">
-                        <label class="col-sm-3 col-form-label">Sexe
-                        </label>
-                        <div class="col-sm-9">
-                          <div class="form-check form-check-inline">
-                            <label class="form-check-label">
-                              <input class="form-check-input" type="radio" name="gender" id="gender-1"
-                                value="option1"> Masculin
-                            </label>
-                          </div>
-                          <div class="form-check form-check-inline">
-                            <label class="form-check-label">
-                              <input class="form-check-input" type="radio" name="gender" id="gender-2"
-                                value="option2"> Féminin
-                            </label>
-                          </div>
-                          <span class="messages"></span>
-                        </div>
-                      </div>
-
                     </div>
                   </div>
 
                 </div>
                 <div class="modal-footer"> <a href="#" data-dismiss="modal" class="btn">Annuler</a>
-                  <button type="Submit" class="btn btn-primary">Valider
+                  <button type="Submit" data-dismiss="modal" class="btn btn-primary" (click)="update()">Valider
                   </button>
                 </div>
               </form>
             </div>
           </div>
         </div>
+
+
+
+
 
         <!--Modal-->
 
@@ -187,35 +174,53 @@
                 <th>Nom</th>
                 <th>Prénoms</th>
                 <th>Email</th>
-                <th>No. Téléphone</th>
+                <th>Profil</th>
                 <th>Statut</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Lael Greer</td>
-                <td>Systems Administrator</td>
-                <td>London</td>
-                <td>21</td>
+              <!--
+                 <tr>
+                <td>Kodjo</td>
+                <td>Bilal</td>
+                <td>bilal@gmail.com</td>
+                <td>USER</td>
+                <td>actif</td>
+                <td class="icon-btn">
+
+                  <button class="btn  btn-danger mr-2" title="désactiver" (click)="deactiver()"
+                   ><i class="feather icon-lock"></i></button>
+                  <button class="btn btn-primary btn-danger mr-2" title="désactiver" data-toggle="modal" data-target="#editer" ><i class="fa fa-times"></i></button>
+
+                </td>
+              </tr>
+              -->
+
+              <tr *ngFor="let user of listUser" >
+                <td >{{ user.lastname }}</td>
+                <td>{{ user.firstname }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.profil.libelle }}</td>
                 <td>
-                  <div class="label-main">
-                    <label class="label label-danger">Désactivé</label>
+                  <div class="label-main" *ngIf="user.statut== 1">
+                    <label class="label label-success">actif</label>
                   </div>
-                  <div class="label-main">
-                    <label class="label label-success">activé</label>
+                  <div class="label-main" *ngIf="user.statut== 2">
+                    <label class="label label-danger">inactif</label>
                   </div>
+
                 </td>
                 <td class="icon-btn">
-                  <button class="btn  btn-info mr-2" title="details" (click)="detail()"><i
+                  <button class="btn  btn-info mr-2" title="details" (click)="detail(user)"><i
                       class="feather icon-trending-up"></i></button>
                   <button class="btn  btn-primary mr-2" title="éditer" data-toggle="modal"
-                    data-target="#editer"><i class="feather icon-edit"></i></button>
-                  <button class="btn btn-warning alert-confirm m-b-10 mr-2" title="activer"
-                    onclick="_gaq.push(['_trackEvent', 'example', 'try', 'sweet-1']);"><i
-                      class="feather icon-command"></i></button>
-                  <button class="btn  btn-danger mr-2" title="supprimer" data-toggle="modal"
-                    data-target="#supprimer"><i class="feather icon-trash-2"></i></button>
+                    data-target="#editer" (click)="editer(user)"><i class="feather icon-edit"></i></button>
+                  <button class="btn btn-success alert-confirm m-b-10 mr-2" title="activer" (click)="activer(user.codeUser)"
+                  *ngIf="user.statut== 2"><i
+                      class="feather icon-check"></i></button>
+                  <button class="btn  btn-danger mr-2" title="désactiver" (click)="desactiver(user.codeUser)"
+                  *ngIf="user.statut== 1" ><i class="feather icon-lock"></i></button>
                   <!--<button class="btn btn-primary btn-danger mr-2" title="désactiver" data-toggle="modal" data-target="#editer" ><i class="fa fa-times"></i></button>-->
 
                 </td>
@@ -225,9 +230,9 @@
             <tfoot>
               <tr>
                 <th>Nom</th>
-                <th>Email</th>
                 <th>Prénoms</th>
-                <th>No. Téléphone</th>
+                <th>Email</th>
+                <th>Profil</th>
                 <th>Statut</th>
                 <th>Actions</th>
               </tr>

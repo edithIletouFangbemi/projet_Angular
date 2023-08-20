@@ -1,37 +1,44 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map, of, pipe } from 'rxjs';
+import { BehaviorSubject, Observable, map, of, pipe, switchMap } from 'rxjs';
+import { ForgotPassword } from 'src/app/model/forgot';
+import { Login } from 'src/app/model/login';
+import { ResetPasswordRequest } from 'src/app/model/resetPasswordRequest';
+
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
-  private apiUrl = 'http://localhost:8080/api/v1/auth/authentication';
-  isLogged = new BehaviorSubject(false);
-  userData: any = null;
+  apiUrl = 'http://localhost:8080/utilisateur';
+  isLogged$ = new BehaviorSubject(false);
+  isLogged: any;
+  userData: any;
+  router:any;
 
   constructor(private http : HttpClient) {}
- /*  public onLogin(email: string, password: string): Observable<boolean>{
 
-      return this.http.post<any>(`${this.apiUrl}`
-      , { email, password }, {responseType: "text" as "json"})
-      .pipe(
-        map(response => {
-          const token = response.token;
-          if (token) {
-            this.storeToken(token); // Stocker le token dans les cookies
-            localStorage.setItem('isLogged','true')
-            return true;
-          }
-          return false;
-        })
-      );
+  onLogin(data:Login): Observable<any>{
 
-     // localStorage.setItem('usermeta', JSON.stringify(this.userData));
-      //this.isLogged.next(true);
+      return this.http.post<any>(`${this.apiUrl}/${'authentication'}`
+      , data, httpOptions)
 
-    }*/
-   /* logOut(){
+    }
+
+  forgotPassword(data: string): Observable<any>{
+    return this.http.post<string>(`${this.apiUrl}/${'forgot'}`
+    , data)
+  }
+
+  reset(data: ResetPasswordRequest): Observable<any>{
+    return this.http.post<string>(`${this.apiUrl}/${'reset'}`
+    , data, httpOptions)
+   }
+   logOut(){
 
       this.clearData();
       this.isLogged.next(false);
@@ -41,26 +48,8 @@ export class LoginService {
     clearData(){
       this.userData = null;
       localStorage.clear();
-    }*/
-    onLogin(){
-      localStorage.setItem('usermeta', JSON.stringify(this.userData));
-      localStorage.setItem("isLogged","true");
-      this.isLogged.next(true);
     }
 
 
-    logout(): void {
-      this.removeToken(); // Supprimer le token des cookies
-    }
-
-    private storeToken(token: string): void {
-      // Stocker le token dans les cookies
-      document.cookie = `jwtToken=${token}; path=/`;
-    }
-
-    private removeToken(): void {
-      // Supprimer le token des cookies
-      document.cookie = 'jwtToken=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-    }
 
 }

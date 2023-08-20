@@ -1,0 +1,179 @@
+<div class="page-wrapper">
+
+  <div class="page-header">
+    <div class="row align-items-end">
+      <div class="col-lg-8">
+        <div class="page-header-title">
+          <div class="d-inline">
+            <h4>Activation de module Additionnel à {{agence.nom}}</h4>
+            <span></span>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="page-header-breadcrumb">
+          <ul class="breadcrumb-title">
+            <li class="breadcrumb-item" style="float: left;">
+              <a routerLink="/base/#"> <i class="feather icon-home"></i> </a>
+            </li>
+            <li class="breadcrumb-item" style="float: left;"><a href="#!">Contrat</a>
+            </li>
+            <li class="breadcrumb-item" style="float: left;"><a href="#!">Activation de Module</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="page-body">
+    <div class="card">
+      <div class="card-header">
+        <h5>Renseignez les champs</h5>
+      </div>
+      <div class="card-block">
+        <form [formGroup]="form">
+          <div>
+
+            <div class="row">
+              <div class="col-md-3">
+                <label class="col-form-label">
+                  Produit
+                </label>
+              </div>
+              <div class="col-md-4">
+                <select class="form-control" formControlName="codeProduit">
+                  <option *ngFor="let produit of listeProduit" [value]="produit.codeProduit">{{produit.nom}}</option>
+                </select>
+              </div>
+              <div class="col-md-5">
+               <div class="col-md-2">
+                <label class="col-form-label ">
+                  Ajout
+                </label>
+               </div>
+               <div class="col-md-2">
+
+                 <button type="button" class=" btn btn-sm btn-success" (click)="CreateItem()" ><i class="feather icon-plus "></i></button>
+               </div>
+              </div>
+            </div>
+
+            <div formArrayName="modules">
+              <div *ngFor="let item of modules.controls; let i = index" [formGroupName]="i">
+
+                <div class="row">
+
+                  <div class="col-md-4">
+                    <label class="col-form-label">
+                      Module
+                    </label>
+                    <select class="form-control" formControlName="codeModule">
+                      <option *ngFor="let module of listeModule" [value]="module.codeModule">{{module.libelleModule}}</option>
+                    </select>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="col-form-label">
+                      Type Activation
+                    </label>
+                    <select class="form-control" formControlName="type" [(ngModel)]="selectedTypeContrat[i]">
+                      <option value="limitee">Limitée</option>
+                      <option value="Illimitee">Illimitée</option>
+                    </select>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="col-form-label">Date de Début
+                    </label>
+                    <input type="date" class="form-control" [min]="currentDate | date:'yyyy-MM-dd'" formControlName="dateDebut" required>
+                  </div>
+                </div>
+
+                <div class="row">
+
+                  <div class="col-md-4">
+
+                    <label class="col-form-label">Date de Fin
+                    </label>
+                    <input class="form-control" type="date" formControlName="dateDebut" [min]="currentDate | date:'yyyy-MM-dd'">
+
+                  </div>
+
+                  <div class="col-md-4" *ngIf="selectedTypeContrat[i] === 'limitee'">
+                    <label class="col-form-label">Nombre de poste
+                    </label>
+                    <input type="number" class="form-control" formControlName="nbrPoste">
+                    <span class="messages"></span>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="col-md-2">
+                      <label class="col-form-label"> Supprimer
+                      </label>
+                    </div>
+                    <div class="col-md-2">
+                      <button type="button" class="btn btn-sm btn-danger" readOnly><i
+                        class="feather icon-trash-2" (click)="RemoveItem(i)"></i></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div>
+            </div>
+            <div class="row mt-4">
+              <div class="col-md-6"></div>
+              <div class="col-md-6">
+
+                <button type="submit" class="btn btn-sm btn-success m-l-5 " (click)="activerModule()">
+                  <i class="feather icon-check-circle"></i>
+                  Valider</button>
+
+
+                <button type="button" class="btn btn-sm btn-danger m-l-5 ">
+
+                  Annuler</button>
+
+              </div>
+
+            </div>
+
+
+
+
+          </div>
+          <!--
+            <div *ngIf="suite == true">
+            <div class="form-group row">
+
+            </div>
+
+            <div class="form-group row" >
+              <div class="col-md-6" >
+
+              </div>
+              <div class="col-md-6" >
+
+              </div>
+
+            </div>
+            <button id="edit-btn" type="button" class="btn btn-sm btn-light waves-effect waves-light f-right" (click)="suivant()">Suivant
+            <i class="feather icon-arrow-right"></i>
+          </button>
+
+            <button type="button" [disabled]="contratForm.invalid" class="btn btn-sm btn-success f-right " (click)="newContrat()" >
+              Valider</button>
+
+            <button type="submit" class="btn btn-sm btn-light f-right m-l-2" (click)="suivant()" >
+              <i class="feather icon-arrow-left"></i>
+              Retour</button>
+          </div>
+          -->
+
+        </form>
+
+      </div>
+    </div>
+
+  </div>

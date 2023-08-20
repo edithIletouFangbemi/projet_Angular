@@ -11,9 +11,9 @@ import { Utilisateur } from 'src/app/model/utilisateur';
 })
 export class UtilisateurService {
 
-  constructor(private http: HttpClient, private cookie : CookieService, private _route : Router) { }
-  apiUrl: string = apiConfig.host + '/api/v1/auth';
-  public token = this.cookie.get('jwtToken');
+  constructor(private http: HttpClient) { }
+  apiUrl: string = apiConfig.host + '/utilisateur';
+
 
  /* public utilisateurRegister(data): Observable<any> {
     if(!this.token ){
@@ -34,6 +34,7 @@ export class UtilisateurService {
     return this.http.post<any>(`${this.apiUrl}/${'register'}`, data, {responseType: "text" as "json" });
   }
 */
+/*
  register(data: Utilisateur): Observable<any> {
     if (!this.token) {
       localStorage.setItem("isLogged", "false");
@@ -43,5 +44,40 @@ export class UtilisateurService {
       const headers = new HttpHeaders().set("Authorization", tokenStr);
       return this.http.post<any>(`${this.apiUrl}/${'register'}`, data, { headers, responseType: "text" as "json" });
     }
+  }*/
+
+ /* getAll(): Observable<Utilisateur[]>{
+    if (!this.token) {
+      localStorage.setItem("isLogged", "false");
+      return of();
+    } else {
+      let tokenStr = "Bearer " + this.token;
+      const headers = new HttpHeaders().set("Authorization", tokenStr);
+      return this.http.get<any>(`${this.apiUrl}/${'register'}`, { headers, responseType: "text" as "json" });
+    }
+  }*/
+
+  register(data: Utilisateur): Observable<any>{
+    return this.http.post<any>(`${this.apiUrl}/${'register'}`, data, {responseType: "text" as "json" });
+  }
+
+  getAll(): Observable<any>{
+    return this.http.get<any>(`${this.apiUrl}/${'all'}`);
+  }
+
+  getOne(code : string): Observable<any>{
+    return this.http.get<any>(`${this.apiUrl}/${code}`, {responseType: "text" as "json" });
+  }
+
+  update(code: string, data: Utilisateur) : Observable<any>{
+    return this.http.put<any>(`${this.apiUrl}/${code}`, data, {responseType: "text" as "json" });
+  }
+
+  delete(code: String) : Observable<any>{
+    return this.http.delete<any>(`${this.apiUrl}/${code}`);
+  }
+
+  activer(code: String): Observable<any>{
+    return this.http.delete<any>(`${this.apiUrl}${"/activer/"+code}`);
   }
 }

@@ -15,19 +15,19 @@
                 <h3 class="text-center txt-primary">Authentification</h3>
               </div>
             </div>
-            <form>
+            <form [formGroup]="formLogin">
               <div >
-                <input type="email"  class="form-control" placeholder="Email ici..." required>
+                <input type="email" formControlName="email" class="form-control" placeholder="Email ici..." required autofocus>
                 <span class="form-bar"></span>
               </div>
               <div class="m-t-20">
-                <input type="password" class="form-control"  placeholder="Mot de passe ici..." required>
+                <input type="password" class="form-control" formControlName="password"  placeholder="Mot de passe ici..." required>
                 <span class="form-bar"></span>
               </div>
 
               <div class="row m-t-30">
                 <div class="col-md-12">
-                  <button type="submit" class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20"
+                  <button type="submit" class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20" (click)="onLogin()"
                     ><i class="feather icon-log-in"></i>S'Authentifier</button>
                 </div>
               </div>

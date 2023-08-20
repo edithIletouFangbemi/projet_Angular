@@ -1,7 +1,4 @@
-<div class="pcoded-content">
-  <div class="pcoded-inner-content">
 
-    <div class="main-body">
       <div class="page-wrapper">
 
         <div class="page-header">
@@ -18,11 +15,11 @@
               <div class="page-header-breadcrumb">
                 <ul class="breadcrumb-title">
                   <li class="breadcrumb-item" style="float: left;">
-                    <a href="../index-2.html"> <i class="feather icon-home"></i> </a>
+                    <a href="#"> <i class="feather icon-home"></i> </a>
                   </li>
-                  <li class="breadcrumb-item" style="float: left;"><a href="#!">Data Table</a>
+                  <li class="breadcrumb-item" style="float: left;"><a href="#!">Produits</a>
                   </li>
-                  <li class="breadcrumb-item" style="float: left;"><a href="#!">Styling</a>
+                  <li class="breadcrumb-item" style="float: left;"><a href="#!">Gestion Produit</a>
                   </li>
                 </ul>
               </div>
@@ -45,42 +42,45 @@
             </div>
             <div class="card-block">
               <div class="dt-responsive table-responsive">
-                <table id="table-style-hover" class="table table-striped table-hover table-bordered nowrap">
+                <table id="table-style-hover" *ngIf="listeProduitCount.length > 0" class="table table-striped table-hover table-bordered nowrap">
                   <thead>
                     <tr>
                       <th>Nom</th>
                       <th>Description</th>
-                      <th>Nbr Module Standard</th>
-                      <th>Nbr Module Additionnel</th>
+                      <th>Module De Base</th>
+                      <th>Module Additionnel</th>
                       <th>Statut</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>Lael Greer</td>
-                      <td>Systems Administrator</td>
-                      <td>London</td>
-                      <td>21</td>
+                    <tr *ngFor="let produit of listeProduitCount">
+                      <td>{{produit.nom}}</td>
+                      <td>{{produit.description}}</td>
+                      <td>{{produit.nbrModuleStandard}}</td>
+                      <td>{{produit.nbrModuleAdditionnel}}</td>
                       <td>
-                        <div class="label-main">
+                        <div class="label-main" *ngIf="produit.statut == 2">
                           <label class="label label-danger">Désactivé</label>
                         </div>
-                        <div class="label-main">
+                        <div class="label-main" *ngIf="produit.statut == 1">
                           <label class="label label-success">activé</label>
                         </div>
                       </td>
                       <td>
-                        <button class="btn btn-info mr-2" routerLink="detail-produit" title="details">
+                        <button class="btn btn-info mr-2" *ngIf="produit.nbrModuleStandard >0 || produit.nbrModuleAdditionnel> 0 " title="details" (click)="details(produit.codeProduit)">
                           <i class="feather icon-trending-up"></i>
                         </button>
-                        <button type="button" class="btn btn-warning mr-2" itle="éditer" data-toggle="modal" data-target="#editer" >
+                        <button type="button" class="btn btn-warning mr-2" title="éditer" data-toggle="modal" data-target="#editer" (click)="editer(produit.codeProduit)">
                           <i class="feather icon-edit-1"></i>
                         </button>
-                        <button type="button" class="btn btn-success mr-2" title="ajouter module" data-toggle="modal" data-target="#module" >
+                        <button type="button" class="btn btn-success mr-2" title="ajouter module" data-toggle="modal" data-target="#module" (click)="getProduitCode(produit.codeProduit)" >
                           <i class="feather icon-clipboard"></i>
                         </button>
-                        <button type="button" class="btn btn-danger mr-2" title="supprimer" data-toggle="modal" data-target="#supprimer" >
+                        <button type="button" title="désactiver" *ngIf="produit.statut === 1" class="btn btn-danger mr-2" (click)="desactiver(produit.codeProduit)">
+                          <i class="feather icon-trash-2"></i>
+                        </button>
+                        <button type="button" title="désactiver" *ngIf="produit.statut === 2" class="btn btn-danger mr-2" (click)="desactiver(produit.codeProduit)">
                           <i class="feather icon-trash-2"></i>
                         </button>
                       </td>
@@ -91,13 +91,17 @@
                     <tr>
                       <th>Nom</th>
                       <th>Description</th>
-                      <th>Nbr Module Standard</th>
-                      <th>Nbr Module Additionnel</th>
+                      <th>Module De Base</th>
+                      <th>Module Additionnel</th>
                       <th>Statut</th>
                       <th>Actions</th>
                     </tr>
                   </tfoot>
                 </table>
+
+                <div *ngIf="listeProduitCount.length === 0" >
+                  <p>Liste vide !!</p>
+                </div>
               </div>
             </div>
           </div>
@@ -105,41 +109,10 @@
         </div>
 
       </div>
-    </div>
-    <div id="styleSelector">
-    </div>
-  </div>
-</div>
-<router-outlet></router-outlet>
+
+
 
 <!--Modal-->
-
-<div class="modal fade" id="supprimer" >
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="deleteModalLabel">Confirmation de suppression</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div>
-          <i class="feather icon-home icon_suppr"></i>
-        </div>
-        <p>Êtes-vous sûr de vouloir supprimer cet élément ?</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-        <button type="button" class="btn btn-danger">Supprimer</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-
  <div class="modal fade" id="myModal">
   <div class="modal-dialog">
   <div class="modal-content">
@@ -148,7 +121,7 @@
   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
   </div>
   <div class="container"></div>
-  <form id="main">
+  <form [formGroup]="formProduit">
   <div class="modal-body">
     <div class="card">
       <div class="card-block">
@@ -156,24 +129,24 @@
       <label class="col-sm-3 feather">Nom
       </label>
       <div class="col-sm-9">
-      <input type="text" class="form-control" name="name" id="name" placeholder="nom ici...">
+      <input type="text" class="form-control" formControlName="nom" placeholder="nom ici..." required (input)="onNameInput($event,'nom')" >
       <span class="messages"></span>
-      </div>,
+      </div>
       </div>
       <div class="form-group row">
         <label class="col-sm-3  feather">Description
         </label>
         <div class="col-sm-9">
-        <input type="text" class="form-control" name="description" id="name" placeholder="description...">
+        <input type="text" class="form-control" formControlName="description" placeholder="description..." required (input)="onNameInput($event,'description')">
         <span class="messages"></span>
         </div>
         </div>
     </div>
   </div>
 </div>
-<div class="modal-footer"> <a href="#" data-dismiss="modal" class="btn">Annuler</a>
-  <a href="#!" type="Submit" class="btn btn-primary">Valider
-    </a>
+<div class="modal-footer"> <a href="#" data-dismiss="modal" class="btn btn-danger">Annuler</a>
+  <button  type="Submit" [disabled]="formProduit.invalid" data-dismiss="modal" class="btn btn-success" (click)="envoyer()">Valider
+  </button>
   </div>
   </form>
   </div>
@@ -184,11 +157,11 @@
   <div class="modal-dialog">
   <div class="modal-content">
   <div class="modal-header">
-  <h4 class="modal-title">Mis à jour Produit</h4>
+  <h4 class="modal-title">Mise à jour Produit</h4>
   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
   </div>
   <div class="container"></div>
-  <form id="main">
+  <form [formGroup]="editProduitForm">
     <div class="modal-body">
       <div class="card">
         <div class="card-block">
@@ -196,7 +169,7 @@
         <label class="col-sm-3 col-form-label">Nom
         </label>
         <div class="col-sm-9">
-        <input type="text" class="form-control" name="name" id="name" placeholder="nom ici...">
+        <input type="text" class="form-control" formControlName="nom" placeholder="nom ici...">
         <span class="messages"></span>
         </div>
         </div>
@@ -204,16 +177,16 @@
           <label class="col-sm-3 col-form-label">Description
           </label>
           <div class="col-sm-9">
-          <input type="text" class="form-control" name="description" id="name" placeholder="description ici...">
+          <input type="text" class="form-control" formControlName="description" placeholder="description ici...">
           <span class="messages"></span>
           </div>
           </div>
       </div>
     </div>
   </div>
-  <div class="modal-footer"> <a href="#" data-dismiss="modal" class="btn">Annuler</a>
-    <a href="#" type="Submit" class="btn btn-primary">Valider
-      </a>
+  <div class="modal-footer"> <a href="#" data-dismiss="modal" class="btn btn-danger">Annuler</a>
+    <button type="Submit" [disabled]="editProduitForm.invalid" data-dismiss="modal" class="btn btn-success" (click)="updateProduit()">Valider
+    </button>
     </div>
     </form>
   </div>
@@ -228,44 +201,43 @@
   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
   </div>
   <div class="container"></div>
-  <form id="main" novalidate>
+  <form [formGroup]="formModule">
     <div class="modal-body">
       <div class="card">
         <div class="card-block">
         <div class="form-group row">
-        <label class="col-sm-3 col-form-label">Libellé
+        <label class="col-sm-4 col-form-label">Libellé
         </label>
-        <div class="col-sm-9">
-        <input type="text" class="form-control" name="name" id="name" placeholder="libelle ici...">
+        <div class="col-sm-8">
+        <input type="text" class="form-control" formControlName="libelleModule" placeholder="libelle ici...">
         <span class="messages"></span>
         </div>
         </div>
         <div class="form-group row">
-          <label class="col-sm-3 col-form-label">Description
+          <label class="col-sm-4 col-form-label">Description
           </label>
-          <div class="col-sm-9">
-          <input type="text" class="form-control" name="description" id="name" placeholder="description ici...">
+          <div class="col-sm-8">
+          <input type="text" class="form-control" formControlName="description" id="name" placeholder="description ici...">
           <span class="messages"></span>
           </div>
           </div>
       </div>
       <div class="form-group row">
-        <label class="col-sm-4 col-form-label">Type de Module
+        <label class="col-sm-4 col-form-label">Type Module
         </label>
         <div class="col-sm-8">
-          <select name="type" id="" class="form-control">
-            <option>Standard</option>
-            <option>Additionnel</option>
+          <select class="form-control" formControlName="typeModule">
+            <option value="standard">Standard</option>
+            <option value="additionnel">Additionnel</option>
           </select>
-        <span class="messages"></span>
+          <span class="messages"></span>
         </div>
-        </div>
+      </div>
     </div>
     </div>
-
-  <div class="modal-footer"> <a href="#" data-dismiss="modal" class="btn">Annuler</a>
-    <a href="#" type="Submit" class="btn btn-primary">Valider
-      </a>
+  <div class="modal-footer"> <a href="#" data-dismiss="modal" class="btn btn-danger">Annuler</a>
+    <button  type="Submit" [disabled]="formModule.invalid" data-dismiss="modal" (click)="save()" class="btn btn-success">Valider
+    </button>
     </div>
     </form>
   </div>

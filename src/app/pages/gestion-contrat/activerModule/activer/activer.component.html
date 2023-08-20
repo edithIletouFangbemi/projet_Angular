@@ -1,0 +1,166 @@
+<div class="page-wrapper">
+
+  <div class="page-header">
+    <div class="row align-items-end">
+      <div class="col-lg-8">
+        <div class="page-header-title">
+          <div class="d-inline">
+            <h4>Activation de Module</h4>
+            <span></span>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="page-header-breadcrumb">
+          <ul class="breadcrumb-title">
+            <li class="breadcrumb-item" style="float: left;">
+              <a routerLink="/base/#"> <i class="feather icon-home"></i> </a>
+            </li>
+            <li class="breadcrumb-item" style="float: left;"><a href="#!">Contrat</a>
+            </li>
+            <li class="breadcrumb-item" style="float: left;"><a href="#!">Activation de Module</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="page-body">
+    <div class="card">
+      <div class="card-header"><h5>Activation de Module Standard</h5></div>
+      <div class="card-block">
+        <form [formGroup]="formActiver">
+          <div>
+
+              <div class="row">
+                <div class="col-md-3">
+                  <label class="col-form-label">Agence
+                  </label>
+                </div>
+
+               <div class="col-md-6">
+                <select class="form-control" formControlName="institution" >
+                  <!--
+
+                    <option *ngFor="let inst of listeInstitution" value="{{inst.codeInst}}">{{inst.nomInst}}</option>
+                  -->
+                </select>
+               </div>
+               <div class="col-md-3">
+                <button type="button" class="btn btn-sm btn-success mt-4"  ><i class="feather icon-plus "></i></button>
+               </div>
+              </div>
+
+              <div formArrayName="contratUnits">
+
+                   <div class="row">
+                      <div class="col-md-4">
+                        <label class="col-form-label">Produit</label>
+                        <select class="form-control" formControlName="produit">
+                          <!--
+
+                            <option *ngFor="let produit of listeProduit" [value]="produit.codeProduit">{{produit.nom}}</option>
+                          -->
+                        </select>
+                      </div>
+                      <!--
+                          <div class="col-md-4">
+                        <label class="col-form-label">Type Contrat</label>
+                        <select class="form-control" formControlName="typeContrat">
+                          <option value="AgenceLimité_PosteLimité">Agence_limité - Poste_limité</option>
+                          <option value="AgenceIllimité_PosteIllimité">Agence_illimité - Poste_illimité</option>
+                          <option value="AgenceLimité_PosteIllimité">Agence_limité - Poste_illimité</option>
+                        </select>
+                      </div>
+                      -->
+                      <div class="col-md-4">
+                        <label class="col-form-label">Date de Début
+                        </label>
+                        <input type="date" class="form-control"  formControlName="dateDebut" required>
+
+                      </div>
+
+                      <div class="col-md-4">
+
+                        <label class="col-form-label" >Date de Fin
+                        </label>
+                        <input class="form-control" type="date" >
+
+                      </div>
+                   </div>
+
+                   <div class="row">
+
+
+
+                    <div class="col-md-4">
+                      <label class="col-form-label">Nombre de poste
+                      </label>
+                      <input type="number" class="form-control" >
+                      <span class="messages"></span>
+                    </div>
+                    <div class="col-md-3">
+                      <button type="button" class="btn btn-sm btn-danger" readOnly ><i class="feather icon-trash-2"></i></button>
+                    </div>
+                   </div>
+                </div>
+
+            <div>
+           </div>
+           <div class="row mt-4">
+            <div class="col-md-6"></div>
+            <div class="col-md-6">
+
+                <button type="submit" class="btn btn-sm btn-success m-l-5 "  >
+                  <i class="feather icon-check-circle"></i>
+                  Valider</button>
+
+
+                <button type="button" class="btn btn-sm btn-danger m-l-5 "  >
+
+                  Annuler</button>
+
+            </div>
+
+           </div>
+
+
+
+
+          </div>
+          <!--
+            <div *ngIf="suite == true">
+            <div class="form-group row">
+
+            </div>
+
+            <div class="form-group row" >
+              <div class="col-md-6" >
+
+              </div>
+              <div class="col-md-6" >
+
+              </div>
+
+            </div>
+            <button id="edit-btn" type="button" class="btn btn-sm btn-light waves-effect waves-light f-right" (click)="suivant()">Suivant
+            <i class="feather icon-arrow-right"></i>
+          </button>
+
+            <button type="button" [disabled]="contratForm.invalid" class="btn btn-sm btn-success f-right " (click)="newContrat()" >
+              Valider</button>
+
+            <button type="submit" class="btn btn-sm btn-light f-right m-l-2" (click)="suivant()" >
+              <i class="feather icon-arrow-left"></i>
+              Retour</button>
+          </div>
+          -->
+
+        </form>
+
+      </div>
+    </div>
+
+</div>

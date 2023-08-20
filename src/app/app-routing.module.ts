@@ -14,17 +14,47 @@ import { ParametrageComponent } from './pages/gestion-licence/parametrage/parame
 import { LicenceServeurComponent } from './pages/gestion-licence/licence-serveur/licence-serveur.component';
 import { LicenceClienteComponent } from './pages/gestion-licence/licence-cliente/licence-cliente.component';
 import { DetailsComponent } from './pages/Utilisateur/details/details.component';
+import { GestionProfilComponent } from './pages/Utilisateur/gestion-profil/gestion-profil.component';
+import { NewComponent } from './new/new.component';
+import { TestComponent } from './test/test.component';
+import { GestionContratComponent } from './pages/gestion-contrat/gestion-contrat.component';
+import { ResetComponent } from './login/forgotReset/reset/reset.component';
+import { AuthGard } from './services/Utils/authGard/authGard';
+import { ForgotComponent } from './login/forgotReset/forgot/forgot.component';
+import { ModifierComponent } from './login/forgotReset/modifier/modifier.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { DroitComponent } from './pages/Utilisateur/droit/droit.component';
+import { DetailContratComponent } from './pages/gestion-contrat/detail/detail-contrat/detail-contrat.component';
+import { DetailAgenceComponent } from './pages/Agence/detail-agence/detail-agence.component';
+import { ActiverComponent } from './pages/gestion-contrat/activerModule/activer/activer.component';
+import { ActiverModuleComponent } from './pages/Agence/activation/activer-module/activer-module.component';
+
 
 
 
 const routes: Routes = [
   {
     path:'',
-    component: LoginComponent
+    component: ResetComponent
+  }
+  ,{
+    path:'forgotPassword',
+    component: ForgotComponent
+  }
+  ,{
+    path:'resetPassword',
+    component: ModifierComponent
+  }
+
+  ,{
+    path:"new",
+    component:NewComponent
   }
   ,{
     path:'base',
     component: BaseComponent,
+    canActivate: [AuthGard],
+    canActivateChild: [AuthGard],
     children: [
       {
         path: 'dashboard',
@@ -33,6 +63,10 @@ const routes: Routes = [
       ,{
         path:'profil',
         component:ProfilComponent
+      }
+      ,{
+        path:'droit',
+        component:DroitComponent
       }
       ,{
         path:'gestion-utilisateur',
@@ -74,6 +108,32 @@ const routes: Routes = [
         path:'detail',
         component:DetailsComponent
       }
+      ,{
+        path:'gestion-profil',
+        component:GestionProfilComponent
+      }
+      ,{
+        path:'detail-agence',
+        component: DetailAgenceComponent
+      }
+      ,{
+        path:'gestion-contrat',
+        component: GestionContratComponent,
+
+      }
+      , {
+        path:'detail-contrat',
+        component:DetailContratComponent
+      }
+      , {
+        path:'activer',
+        component:ActiverComponent
+      }
+      , {
+        path:'activation',
+        component:ActiverModuleComponent
+      }
+
 
 
     ]

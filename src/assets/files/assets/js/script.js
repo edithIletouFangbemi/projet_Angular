@@ -10,7 +10,7 @@ $('#styleSelector').append(''+
 '</div>'+
 '<ul>'+
 '<li>'+
-'<p class="selector-title main-title st-main-title"><b>Adminty </b>Customizer</p>'+
+'<p class="selector-title main-title st-main-title"><b>Palette </b>de Couleur</p>'+
 '<span class="text-muted">Live customizer with tons of options</span>'+
 '</li>'+
 '<li>'+
@@ -170,13 +170,4 @@ $('#styleSelector').append(''+
 '</div>'+
 '</div>'+
 '<ul>'+
-'<li>'+
-'<a href="http://html.codedthemes.com/Adminty/doc" target="_blank" class="btn btn-primary btn-block m-r-15 m-t-5 m-b-10">Online Documentation</a>'+
-'</li>'+
-'<li class="text-center">'+
-'<span class="text-center f-18 m-t-15 m-b-15 d-block">Thank you for sharing !</span>'+
-'<a href="#!" target="_blank" class="btn btn-facebook soc-icon m-b-20"><i class="feather icon-facebook"></i></a>'+
-'<a href="#!" target="_blank" class="btn btn-twitter soc-icon m-l-20 m-b-20"><i class="feather icon-twitter"></i></a>'+
-'</li>'+
-'</ul>'+
 '');

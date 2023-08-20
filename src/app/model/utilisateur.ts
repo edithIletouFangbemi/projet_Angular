@@ -1,8 +1,13 @@
+import { Profil } from "./Profil";
+
 export class Utilisateur
 {
-  Lastname: string = "";
-  Firstname: string = "";
+  codeUser? : any;
+  lastname?: string = "";
+  firstname?: string = "";
   email: string = "";
-  profil : string = "";
-
+  role : string = "";
+  profil!: Profil;
+  statut?: any;
+  token!:any;
 }

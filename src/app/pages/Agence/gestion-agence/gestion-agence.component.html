@@ -1,7 +1,4 @@
-<div class="pcoded-content">
-  <div class="pcoded-inner-content">
 
-    <div class="main-body">
       <div class="page-wrapper">
 
         <div class="page-header">
@@ -9,7 +6,7 @@
             <div class="col-lg-8">
               <div class="page-header-title">
                 <div class="d-inline">
-                  <h4>Les Agences Partenaires</h4>
+                  <h4>Les Agences de {{inst.nomInst}}</h4>
                   <span></span>
                 </div>
               </div>
@@ -18,11 +15,11 @@
               <div class="page-header-breadcrumb">
                 <ul class="breadcrumb-title">
                   <li class="breadcrumb-item" style="float: left;">
-                    <a href="../index-2.html"> <i class="feather icon-home"></i> </a>
+                    <a routerLink="/base/#"> <i class="feather icon-home"></i> </a>
                   </li>
-                  <li class="breadcrumb-item" style="float: left;"><a href="#!">Data Table</a>
+                  <li class="breadcrumb-item" style="float: left;"><a href="#!">Institution</a>
                   </li>
-                  <li class="breadcrumb-item" style="float: left;"><a href="#!">Styling</a>
+                  <li class="breadcrumb-item" style="float: left;"><a href="#!">Agence2</a>
                   </li>
                 </ul>
               </div>
@@ -37,69 +34,17 @@
             <div class="card-header">
               <h5>Liste des Agences</h5>
 
-              <button type="button" class="Plug-right btn btn-grd-primary m-r-10 m-b-5 "  data-toggle="modal" data-target="#myModal"><i
-                  class="feather icon-file-plus" ></i>
-                Ajouter une agence</button>
                 <!--Modals-->
-
-                <div class="modal fade" id="myModal">
-                  <div class="modal-dialog">
-                  <div class="modal-content">
-                  <div class="modal-header">
-                  <h4 class="modal-title">Enregistrer une agence</h4>
-                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                  </div>
-                  <div class="container"></div>
-                  <form id="main" novalidate>
-                  <div class="modal-body">
-                    <div class="card">
-                      <div class="card-block">
-                      <div class="form-group row">
-                      <label class="col-sm-3 col-form-label">Nom
-                      </label>
-                      <div class="col-sm-9">
-                      <input type="text" class="form-control" name="name" id="name" placeholder="Text Input Validation">
-                      <span class="messages"></span>
-                      </div>
-                      </div>
-                      <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Description
-                        </label>
-                        <div class="col-sm-9">
-                        <input type="text" class="form-control" name="prenom" id="name" placeholder="Text Input Validation">
-                        <span class="messages"></span>
-                        </div>
-                        </div>
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Adresse</label>
-                          <div class="col-sm-9">
-                          <input type="email" class="form-control" id="email" name="email" placeholder="Enter valid e-mail address">
-                          <span class="messages"></span>
-                          </div>
-                        </div>
-
-                    </div>
-                  </div>
-
-                </div>
-                <div class="modal-footer"> <a href="#" data-dismiss="modal" class="btn">Annuler</a>
-                  <a href="#" type="Submit" class="btn btn-primary">Valider
-                    </a>
-                  </div>
-                </form>
-                  </div>
-                  </div>
-                </div>
 
                 <div class="modal fade" id="editer">
                   <div class="modal-dialog">
                   <div class="modal-content">
                   <div class="modal-header">
-                  <h4 class="modal-title">Editer Agence</h4>
+                  <h4 class="modal-title">mise à jour Agence</h4>
                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                   </div>
                   <div class="container"></div>
-                  <form id="main" novalidate>
+                  <form [formGroup]="editAgenceForm">
                   <div class="modal-body">
                     <div class="card">
                       <div class="card-block">
@@ -107,7 +52,7 @@
                       <label class="col-sm-3 col-form-label">Nom
                       </label>
                       <div class="col-sm-9">
-                      <input type="text" class="form-control" name="name" id="name" placeholder="Text Input Validation">
+                      <input type="text" class="form-control" (input)="onNameAgenceInput($event,'nom')" formControlName="nom" placeholder="nom ici...">
                       <span class="messages"></span>
                       </div>
                       </div>
@@ -115,14 +60,14 @@
                         <label class="col-sm-3 col-form-label">Description
                         </label>
                         <div class="col-sm-9">
-                        <input type="text" class="form-control" name="prenom" id="name" placeholder="Text Input Validation">
+                        <input type="text" class="form-control" formControlName="description" (input)="onNameAgenceInput($event,'description')" placeholder="description ici...">
                         <span class="messages"></span>
                         </div>
                         </div>
                         <div class="form-group row">
                           <label class="col-sm-3 col-form-label">Adresse</label>
                           <div class="col-sm-9">
-                          <input type="email" class="form-control" id="email" name="email" placeholder="Enter valid e-mail address">
+                          <input type="email" class="form-control" formControlName="adresse" placeholder="adresse ici...">
                           <span class="messages"></span>
                           </div>
                         </div>
@@ -131,14 +76,74 @@
                   </div>
 
                 </div>
-                <div class="modal-footer"> <a href="#" data-dismiss="modal" class="btn">Annuler</a>
-                  <a href="#" type="Submit" class="btn btn-primary">Valider
-                    </a>
+                <div class="modal-footer"> <a href="#" data-dismiss="modal" class="btn btn-danger">Annuler</a>
+                  <button type="Submit" [disabled]="editAgenceForm.invalid" data-dismiss="modal" class="btn btn-success" (click)="update(inst.codeInst)">Valider
+                  </button>
                   </div>
                 </form>
                   </div>
                   </div>
+                </div>
+
+                <div class="modal fade" id="activer">
+                  <div class="modal-dialog">
+                  <div class="modal-content">
+                  <div class="modal-header">
+                  <h4 class="modal-title">Activation de Module</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                   </div>
+                  <div class="container"></div>
+                  <form [formGroup]="activeModuleForm">
+                  <div class="modal-body">
+                    <div class="card">
+                      <div class="card-block">
+                      <div class="form-group row">
+                      <label class="col-sm-4 col-form-label">Produit
+                      </label>
+                      <div class="col-sm-8">
+                      <select class="form-control" formControlName="codeProduit" >
+                        <option *ngFor="let produit of listeProduit" [value]="produit.codeProduit">{{produit.nom}}</option>
+                      </select>
+                      <span class="messages"></span>
+                      </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Nombre de Poste
+                        </label>
+                        <div class="col-sm-8">
+
+                        <input type="number" min="1" class="form-control" formControlName="nbrPoste" (input)="onNumberInput($event,'nbrPoste')">
+
+                        <span class="messages"></span>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Module
+                        </label>
+                        <div class="col-sm-8">
+                        <select class="form-control" formControlName="modules" multiple="true" >
+                          <option *ngFor="let module of listeModule" [value]="module.codeModule">{{module.libelleModule}}</option>
+                        </select>
+                        <span class="messages"></span>
+                        </div>
+                      </div>
+
+
+
+                    </div>
+                  </div>
+
+                </div>
+                <div class="modal-footer"> <a href="#" data-dismiss="modal" class="btn btn-danger">Annuler</a>
+                  <button [disabled]="activeModuleForm.invalid" type="Submit" data-dismiss="modal" class="btn btn-success" (click)="activerModule()">Valider
+                  </button>
+                  </div>
+                </form>
+                  </div>
+                  </div>
+                </div>
+
+
 
                   <!--Modal-->
 
@@ -151,36 +156,39 @@
                       <th>Nom</th>
                       <th>Description</th>
                       <th>Adresse</th>
-                      <th>Nbr Poste</th>
                       <th>Statut</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>Lael Greer</td>
-                      <td>Systems Administrator</td>
-                      <td>London</td>
-                      <td>21</td>
+                    <tr *ngFor="let agence of listeAgence">
+                      <td>{{agence.nom}}</td>
+                      <td>{{agence.description}}</td>
+                      <td>{{agence.adresse}}</td>
                       <td>
-                        <div class="label-main">
+                        <div class="label-main" *ngIf="agence.statut == 2">
                           <label class="label label-danger">Désactivé</label>
                         </div>
-                        <div class="label-main">
+                        <div class="label-main" *ngIf="agence.statut == 1">
                           <label class="label label-success">activé</label>
                         </div>
                       </td>
                       <td>
-                        <div class="dropdown-primary dropdown open">
-                          <button class="btn btn-primary dropdown-toggle waves-effect waves-light " type="button" id="dropdown-2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Actions</button>
-                          <div class="dropdown-menu" aria-labelledby="dropdown-2" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
-                          <a class="dropdown-item waves-light waves-effect" >Details</a>
-                          <a type="button" class="dropdown-item waves-light waves-effect" data-toggle="modal" data-target="#editer" >Editer</a>
-                          <a class="dropdown-item waves-light waves-effect" >Supprimer</a>
-                          <a class="dropdown-item waves-light waves-effect" >Activer</a>
-                          <a class="dropdown-item waves-light waves-effect" >Desactiver</a>
-                          </div>
-                        </div>
+                        <button type="button" class="btn btn-info mr-2" title="detail"
+                         (click)="detail(agence)">
+                          <i class="feather icon-trending-up"></i>
+                        </button>
+                        <button type="button" class="btn btn-info mr-2" title="éditer" data-toggle="modal"
+                        data-target="#editer" (click)="editer(agence)">
+                          <i class="feather icon-edit-1"></i>
+                        </button>
+                        <button type="button" class="btn btn-success mr-2" title="Activer un module" data-toggle="modal"
+                         (click)="getProduit(agence, inst.codeInst)">
+                          <i class="feather icon-check-circle"></i>
+                        </button>
+                        <button type="button" class="btn btn-danger mr-2" (click)="desactiver(agence.codeAgence)">
+                          <i class="feather icon-trash-2"></i>
+                        </button>
                       </td>
                     </tr>
 
@@ -190,7 +198,6 @@
                       <th>Nom</th>
                       <th>Description</th>
                       <th>Adresse</th>
-                      <th>Nbr Poste</th>
                       <th>Statut</th>
                       <th>Actions</th>
                     </tr>
@@ -203,11 +210,9 @@
         </div>
 
       </div>
-    </div>
-    <div id="styleSelector">
-    </div>
-  </div>
-</div>
+
+
+
 
 
 
