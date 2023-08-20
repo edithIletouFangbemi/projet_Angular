@@ -1,0 +1,179 @@
+<div class="pcoded-content">
+  <div class="pcoded-inner-content">
+
+    <div class="main-body">
+      <div class="page-wrapper">
+
+        <div class="page-header">
+          <div class="row align-items-end">
+            <div class="col-lg-8">
+              <div class="page-header-title">
+                <div class="d-inline">
+                  <h4>Les Licences Serveurs</h4>
+                  <span></span>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="page-header-breadcrumb">
+                <ul class="breadcrumb-title">
+                  <li class="breadcrumb-item" style="float: left;">
+                    <a href="../index-2.html"> <i class="feather icon-home"></i> </a>
+                  </li>
+                  <li class="breadcrumb-item" style="float: left;"><a href="#!">Data Table</a>
+                  </li>
+                  <li class="breadcrumb-item" style="float: left;"><a href="#!">Styling</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="page-body">
+
+          <div class="card">
+            <div class="card-header">
+              <h5>Liste des Licences Serveurs</h5>
+
+              <button type="button" class="f-right btn btn-grd-inverse m-r-10 m-b-5 "  data-toggle="modal" data-target="#creerLicence"><i
+                  class="feather icon-plus" ></i>
+                Nouvelle Licence Serveur</button>
+                <!--Modals-->
+
+                <div class="modal fade" id="creerLicence">
+                  <div class="modal-dialog">
+                  <div class="modal-content">
+                  <div class="modal-header">
+                  <h4 class="modal-title feather">Nouvelle Licence Serveur</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  </div>
+                  <div class="container"></div>
+                  <form id="main" novalidate>
+                  <div class="modal-body">
+                    <div class="card">
+                      <div class="card-block">
+                      <div class="form-group row">
+                        <label class="col-sm-3  feather">Institution
+                        </label>
+                        <div class="col-sm-9">
+                          <select class="form-control" name="Institution">
+                            <option>FUCEC</option>
+                            <option>FINAM</option>
+                          </select>
+                        <span class="messages"></span>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                          <label class="col-sm-3  feather">Agence
+                          </label>
+                          <div class="col-sm-9">
+                            <select class="form-control" name="agence">
+                              <option>FUCEC</option>
+                              <option>FINAM</option>
+                            </select>
+                          <span class="messages"></span>
+                          </div>
+                          </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer"> <a href="#" data-dismiss="modal" class="btn">Annuler</a>
+                  <a href="#!" type="Submit" class="btn btn-primary">Valider
+                    </a>
+                  </div>
+                  </form>
+                  </div>
+                  </div>
+                </div>
+
+                  <!--Modal-->
+
+            </div>
+            <div class="card-block">
+              <div class="dt-responsive table-responsive">
+                <table id="table-style-hover" class="table table-striped table-hover table-bordered nowrap">
+                  <thead>
+                    <tr>
+                      <th>Institution</th>
+                      <th>Agence</th>
+                      <th>Type de Contrat</th>
+                      <th>Nbr de Poste</th>
+                      <th>Statut</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Lael Greer</td>
+                      <td>Systems Administrator</td>
+                      <td>London</td>
+                      <td>21</td>
+                      <td>
+                        <div class="label-main">
+                          <label class="label label-danger">Désactivé</label>
+                        </div>
+                        <div class="label-main">
+                          <label class="label label-success">activé</label>
+                        </div>
+                      </td>
+                      <td>
+                        <button class="btn btn-info mr-2" title="detail">
+                          <i class=" feather icon-feather"></i>
+                        </button>
+                        <button class="btn btn-danger mr-2" title="désactiver" data-toggle="modal" data-target="#desactiver">
+                          <i class="feather icon-trash-2"></i>
+                        </button>
+                      </td>
+                    </tr>
+
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <th>Institution</th>
+                      <th>Agence</th>
+                      <th>Type de Contrat</th>
+                      <th>Nbr de Poste</th>
+                      <th>Statut</th>
+                      <th>Actions</th>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+    <div id="styleSelector">
+    </div>
+  </div>
+</div>
+
+<!---Modal--->
+
+<!--désactivation-->
+<div class="modal fade" id="desactiver" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Confirmation de désactivation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p><i class="bi bi-trash-fill"></i> Êtes-vous sûr de vouloir désactiver cet élément ?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+        <button type="button" class="btn btn-danger">désactiver</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
