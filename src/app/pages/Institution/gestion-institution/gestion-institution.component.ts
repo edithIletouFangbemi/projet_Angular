@@ -134,6 +134,7 @@ export class GestionInstitutionComponent implements OnInit{
 
   details(institution: Institution){
     const data: Institution = Object.assign({},institution)
+    console.log(institution)
     this._route.navigate(["base/gestion-agence"], {queryParams: data})
 
   }
@@ -205,6 +206,18 @@ export class GestionInstitutionComponent implements OnInit{
       institutionCode: [""]
     })
 
+  }
+
+  get nomInst(){
+    return this.formSaveInst.get('nomInst');
+  }
+
+  get adresseInst(){
+    return this.formSaveInst.get('adresseInst');
+  }
+
+  get typeArchitecture(){
+    return this.formSaveInst.get('typeArchitecture');
   }
 
 

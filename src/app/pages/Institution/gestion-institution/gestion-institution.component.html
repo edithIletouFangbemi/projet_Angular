@@ -130,7 +130,12 @@
                       </label>
                       <div class="col-sm-9">
                       <input type="text" class="form-control" formControlName="nomInst" placeholder="nom ici..." (input)="onNameInput($event, 'nomInst')">
-                      <span class="messages"></span>
+                      <div *ngIf="nomInst?.invalid && nomInst?.dirty || nomInst?.touched">
+                        <code class="" *ngIf="formSaveInst.get('nomInst')?.hasError('required')">
+                          Nom Obligatoire!!!
+                        </code>
+                      </div>
+
                       </div>
                       </div>
                       <div class="form-group row">
@@ -156,7 +161,7 @@
 
                 </div>
                 <div class="modal-footer"> <a href="#" data-dismiss="modal" class="btn btn-danger">Annuler</a>
-                  <button type="Submit" data-dismiss="modal"  class="btn btn-success" (click)="save()">Valider
+                  <button type="Submit" [disabled]="formSaveInst.invalid"data-dismiss="modal"  class="btn btn-success" (click)="save()">Valider
                   </button>
                   </div>
                 </form>
@@ -290,13 +295,13 @@
                       </td>
                       <td>
                         <button class="btn btn-success mr-2" *ngIf="inst.nbrAgence > 0" title="details" (click)="details(inst)">
-                          <i class="feather icon-trending-up"></i>
+                          <i class="fa fa-eye"></i>
                         </button>
                         <button class="btn btn-primary mr-2" title="editer" data-toggle="modal" data-target="#editer" (click)="editer(inst)">
                           <i class="feather icon-edit-1"></i>
                         </button>
                         <button class="btn btn-danger mr-2" title="ajouter agence" data-toggle="modal" data-target="#agence" (click)="getInst(inst)">
-                          <i class="feather icon-box"></i>
+                          <i class="fa fa-plus"></i>
                         </button>
 
                       </td>

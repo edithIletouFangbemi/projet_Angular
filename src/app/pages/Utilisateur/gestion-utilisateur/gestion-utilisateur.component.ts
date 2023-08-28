@@ -64,8 +64,9 @@ export class GestionUtilisateurComponent implements OnInit{
     this.utilisateurService.register(data).pipe(first()).subscribe
     ({
       next:() =>{
+        this.lister()
       Swal.fire("Enregistrement ","Opération reussie","success");
-      this._router.navigateByUrl("base/gestion-utilisateur");
+     // this._router.navigateByUrl("base/gestion-utilisateur");
      },
      error: error =>{
       console.log(error)
@@ -88,7 +89,6 @@ export class GestionUtilisateurComponent implements OnInit{
       next:()=>{
         Swal.fire("Reussite","mise à jour éffectuée","success");
         this.lister(
-
         )
       },
       error: (error)=>{
@@ -96,7 +96,6 @@ export class GestionUtilisateurComponent implements OnInit{
       }
     })
    }
-
    detail(user: Utilisateur){
     const data : Utilisateur = Object.assign({}, user)
     this._router.navigate(["base/detail"], {queryParams: data });

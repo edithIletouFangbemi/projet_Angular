@@ -32,6 +32,9 @@ export class InstitutionServiceService {
   getAllInstitution(): Observable<any>{
     return this.http.get<any>(`${this.apiBaseUrl}/${'all'}`);
   }
+  countWithAgence(): Observable<any>{
+    return this.http.get<any>(`${this.apiBaseUrl}/${'countByAgence'}`);
+  }
 
   update(data:Institution): Observable<any>{
     return this.http.put<any>(`${this.apiBaseUrl}/${"update/"+ data.codeInst}`,data);
@@ -74,7 +77,7 @@ export class InstitutionServiceService {
     return this.http.get<any>(`${this.apiAgenceBaseUrl}/${"modules"}/${codeagence}/${codeproduit}`);
   }
 
-  activateModule(data: ActivationRequest): Observable<any>{
-    return this.http.post<any>(`${this.apiAgenceBaseUrl}/${"activation"}`, data);
+  activateModule(data: ActivationRequest): Observable<Agence>{
+    return this.http.post<Agence>(`${this.apiAgenceBaseUrl}/${"activation"}`, data);
   }
 }

@@ -42,6 +42,8 @@ export class ContratInstitutionServiceService {
     return this.http.get<any>(`${this.apiBaseUrl}/${"liste"}`)
   }
 
+ 
+
   getByInstitution(data: Institution): Observable<any>{
     return this.http.post<any>(`${this.apiBaseUrl}/${"getByInstitution"}`, data)
   }

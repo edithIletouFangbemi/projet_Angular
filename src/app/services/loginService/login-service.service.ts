@@ -30,7 +30,7 @@ export class LoginService {
     }
 
   forgotPassword(data: string): Observable<any>{
-    return this.http.post<string>(`${this.apiUrl}/${'forgot'}`
+    return this.http.post<any>(`${this.apiUrl}/${'forgot'}`
     , data)
   }
 

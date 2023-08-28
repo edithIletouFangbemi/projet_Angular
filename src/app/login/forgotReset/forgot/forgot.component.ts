@@ -28,12 +28,12 @@ export class ForgotComponent implements OnInit {
   }
 
   send(){
-    const data : string = Object.assign({}, this.forgotForm.value)
-    this.loginService.forgotPassword(data).pipe(first()).subscribe({
+    this.loginService.forgotPassword(this.forgotForm.get('email')?.value).pipe(first()).subscribe({
       next: response=>{
         Swal.fire("Reussite",JSON.stringify(response), "success")
       },
       error: error=>{
+        Swal.fire("Echec",error.error, "error")
         console.log(error)
       }
     })

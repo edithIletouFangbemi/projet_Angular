@@ -159,20 +159,36 @@
                     <input type="checkbox"  formControlName="idDisqueDur" class="mr-2" >Identifiant du disque dur
                   </div>
 
+                  <div *ngIf="paramet?.invalid && dateDebut?.dirty || dateDebut?.touched">
+                    <span class="couleur" *ngIf="parametreForm.get('parametres')?.hasError('required')">
+                      Choisir les parametres!!!
+                    </span>
+
+                  </div>
+
                 </div>
               </div>
 
               <br>
               <div class="form-group row">
-                <label class="col-sm-5  feather">Date de Début
+                <label class="col-sm-5  feather">Date de Début <span class="couleur">*</span>
                 </label>
                 <div class="col-sm-7">
-                  <input type="date" class="form-control" [min]="currentDate| date:'dd-MM-yyyy'" formControlName="dateDebut" placeholder="date debut ici...">
+                  <input type="date" class="form-control" [min]="currentDate| date:'yyyy-MM-dd'" formControlName="dateDebut" placeholder="date debut ici...">
+                </div>
+              </div>
+              <div *ngIf="dateDebut?.invalid && dateDebut?.dirty || dateDebut?.touched">
+                <span class="couleur" *ngIf="parametreForm.get('dateDebut')?.hasError('required')">
+                  Date de debut Obligatoire!!!
+                </span>
 
-                 <!--
+              </div>
 
-                   <div *ngIf="parametreForm?.get('dateDebut')?.errors?.['dateGreaterThanToday']">La date doit être supérieure ou égale à la date d'aujourd'hui.</div>
-                 -->
+              <div class="form-group row">
+                <label class="col-sm-5  feather">Date de Fin
+                </label>
+                <div class="col-sm-7">
+                  <input type="date" class="form-control" [min]="anotherDate| date:'yyyy-MM-dd'" formControlName="dateFin" placeholder="date Fin ici...">
 
                 </div>
               </div>
@@ -181,7 +197,7 @@
           </div>
         </div>
         <div class="modal-footer"> <a href="#" data-dismiss="modal" class="btn btn-danger">Annuler</a>
-          <button type="Submit" data-dismiss="modal" class="btn btn-success" (click)="save()">Valider
+          <button [disabled]="parametreForm.invalid" type="Submit" data-dismiss="modal" class="btn btn-success" (click)="save()">Valider
           </button>
         </div>
       </form>

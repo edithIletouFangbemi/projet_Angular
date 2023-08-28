@@ -1,0 +1,258 @@
+<div class="page-wrapper">
+
+  <div class="page-header">
+    <div class="row align-items-end">
+      <div class="col-lg-8">
+        <div class="page-header-title">
+          <div class="d-inline">
+            <h4>Nouveau Contrat</h4>
+            <span></span>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="page-header-breadcrumb">
+          <ul class="breadcrumb-title">
+            <li class="breadcrumb-item" style="float: left;">
+              <a routerLink="/base/#"> <i class="feather icon-home"></i> </a>
+            </li>
+            <li class="breadcrumb-item" style="float: left;"><a href="#!">Contrat</a>
+            </li>
+            <li class="breadcrumb-item" style="float: left;"><a href="#!">Nouveau Contrat</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="page-body">
+    <div class="card">
+      <div class="card-header">
+        <h5>Nouveau Contrat</h5>
+      </div>
+      <div class="card-block">
+        <form [formGroup]="form">
+          <div class="dt-responsive table-responsive">
+            <div class="row">
+              <div class="col-md-6">
+                <label class="col-form-label">Institution
+                </label>
+                <select class="form-control" formControlName="institution">
+                  <option *ngFor="let institution of listeInstitution" [value]="institution.codeInst">
+                    {{institution.nomInst}}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="col-form-label">Produit</label>
+                <select class="form-control" formControlName="produit" (click)="getModule()">
+                  <option *ngFor="let produit of listeProduit" [value]="produit.codeProduit">{{produit.nom}}</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+
+
+
+              <div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <label class="col-form-label">Type Contrat</label>
+                    <select class="form-control" formControlName="typeContrat" [(ngModel)]="selectedTypeContrat">
+                      <option value="AgenceLimité_PosteLimité">Agence_limité - Poste_limité</option>
+                      <option value="AgenceIllimité_PosteIllimité">Agence_illimité - Poste_illimité</option>
+                      <option value="AgenceLimité_PosteIllimité">Agence_limité - Poste_illimité</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="col-form-label">Date de Début
+                    </label>
+                    <input type="date" class="form-control" [min]="currentDate | date:'yyyy-MM-dd'"
+                      formControlName="dateDebut" [(ngModel)]="anotherDate" required>
+                  </div>
+                </div>
+                <div class="row">
+
+                  <div class="col-md-6">
+                    <label class="col-form-label">Date de Fin
+                    </label>
+                    <input class="form-control" type="date" [min]="anotherDate| date: 'yyyy-MM-dd'"
+                      formControlName="dateFin">
+                  </div>
+                  <div class="col-md-6"
+                    *ngIf="selectedTypeContrat === 'AgenceLimité_PosteLimité' || selectedTypeContrat === 'AgenceLimité_PosteIllimité' ">
+                    <label class="col-form-label">Nombre d'Agence
+                    </label>
+                    <input type="number" class="form-control" (input)="onNameContratInput($event,'nbrAgence')" min="1"
+                      formControlName="nbrAgence" [(ngModel)]="numberEntered">
+
+                  </div>
+                  <!--
+                        <div class="col-md-4" *ngIf="selectedTypeContrat === 'AgenceLimité_PosteLimité' ">
+                        <label class="col-form-label">Nombre de poste
+                        </label>
+                        <input type="number" class="form-control" (input)="onNameContratInput($event,'nbrPosteTotal')" min="1" formControlName="nbrPoste" placeholder="nombre de poste ici...">
+                        <span class="messages"></span>
+
+                      </div>
+                      -->
+
+
+                </div>
+
+                <div class="row mt-3 mb-3">
+                    <button class="btn btn-sm btn-success float-right" (click)="CreateItem()">
+                      <i class="feather icon-plus"></i>
+                    </button>
+                    <!-- <input type="text" [(ngModel)]="searchText" placeholder="Search" (ngModelChange)="filter($event)"
+                      class="form-control"> -->
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                    <table class="table table-bordered ">
+                      <thead>
+                        <tr class="bg-success text-white">
+                          <th>Module</th>
+                          <th (click)="onNameSort()">Agence</th>
+                          <th>Type</th>
+                          <th>Nombre de Poste</th>
+                          <th>Date Debut</th>
+                          <th>Date Fin</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody formArrayName="contratUnits">
+                        <tr  *ngFor="let item of contratUnits.controls; let i = index" [formGroupName]="i">
+                          <td>
+                            <select class="form-control" formControlName="module">
+                              <option *ngFor="let module of listeModule" [value]="module.codeModule">{{module.libelleModule}}</option>
+                            </select>
+                          </td>
+                          <td>
+                            <select class="form-control" formControlName="agence">
+                              <option *ngFor="let agence of listeAgence" [value]="agence.codeAgence">{{agence.nom}}</option>
+                            </select>
+                          </td>
+                          <td>
+                            <select class="form-control" formControlName="type" [(ngModel)]="itemSelected[i]">
+                              <option value="limite">limité</option>
+                              <option value="illimite">Illimité</option>
+                            </select>
+                          </td>
+                          <td *ngIf="itemSelected[i]==='illimite'">
+
+                            <input type="number" min="1" aria-disabled="true" class="form-control" formControlName="nbrPoste"/>
+                          </td>
+                          <td *ngIf="itemSelected[i] !=='illimite'">
+
+                            <input type="number" min="1" class="form-control" formControlName="nbrPoste"/>
+                          </td>
+                          <td>
+                            <input type="date" formControlName="dateDebut" class="form-control" [min]="currentDate | date:'yyyy-MM-dd'" />
+                          </td>
+                          <td class="text-center">
+                            <input type="date" formControlName="dateFin" class="form-control" [min]="currentDate | date:'yyyy-MM-dd'" />
+                          </td>
+                          <td>
+                            <button (click)="Validation(i)" class="btn btn-info">
+                              <i class="feather icon-check"></i>
+                            </button>
+                            <button (click)="RemoveItem(i)" class="btn btn-danger">
+                              <i class="feather icon-trash-2"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+
+              </div>
+              <br>
+
+
+            </div>
+
+            <div>
+          <div class="row">
+            <div class="col-md-6"></div>
+            <div class="col-md-6">
+
+                <button type="button" [disabled]="form.invalid" class="btn btn-sm btn-success mr-2" (click)="newContrat()" >
+                  Valider</button>
+
+
+                <button type="submit" class="btn btn-sm btn-danger m-l-3" (click)="annulerForm()" >
+
+                  Annuler</button>
+
+            </div>
+
+           </div>
+
+
+            </div>
+
+            <!-- <div class="dt-responsive table-responsive" *ngIf="suite">
+              <h5>Choix de Module</h5>
+              <br>
+
+                <div class="row">
+                  <div class="col-md-6">
+                      <label class="col-form-label">Modules: </label>
+                      <select class="form-control" formControlName="modules">
+                        <option *ngFor="let module of listeModule" [value]="module.codeModule">{{module.libelleModule}}</option>
+                      </select>
+                  </div>
+                  <fieldset>
+                    <div class="row">
+                        <div class="col-md-4">
+                          <label class="col-form-label">Agences: </label>
+                          <select class="form-control" [disabled]="(selectedTypeContrat === 'AgenceLimité_PosteLimité' || selectedTypeContrat === 'AgenceLimité_PosteIllimité') && selectedItems.length >= numberEntered" formControlName="agences" multiple [(ngModel)]="selectedItems" >
+                            <option *ngFor="let agence of listeAgence" [value]="agence.codeAgence">{{agence.nom}}</option>
+                          </select>
+                        </div>
+
+                        <div class="col-md-4">
+                          <label class="col-form-label">
+                            Type Activation
+                          </label>
+                          <select class="form-control" formControlName="type" [(ngModel)]="selectedTypeContrat">
+                            <option value="limitee">Limitée</option>
+                            <option value="Illimitee">Illimitée</option>
+                          </select>
+                        </div>
+                        <div class="col-md-4">
+                          <label class="col-form-label">Date de Début
+                          </label>
+                          <input type="date" class="form-control" [min]="currentDate | date:'yyyy-MM-dd'" formControlName="dateDebut" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                    </div>
+                  </fieldset>
+
+                </div>
+
+
+          </div> -->
+
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+
+
+
+  </div>
+
+</div>

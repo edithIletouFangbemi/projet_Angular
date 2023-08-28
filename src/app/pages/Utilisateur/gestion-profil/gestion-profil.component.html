@@ -60,38 +60,37 @@
                 <span class="messages"></span>
                 </div>
                 </div>
-                <h5>Habilitations</h5>
-                <div class="form-group row">
-                  <table class="table table-striped table-hover table-bordered nowrap">
+                <div class="row">
+                  <h5 class="col-sm-3 col-form-label">Habilitations</h5>
+                  <div class="col-sm-9">
+
+                    <select type="select"  class="mr-2" formControlName="habilitations" multiple>
+                      <option *ngFor="let habil of droits" value="{{habil.codeHabilitation}}"> {{habil.libelle}}</option>
+                    </select>
+                  </div>
+                  <!-- <table class="table table-striped table-hover table-bordered nowrap">
                     <thead>
                       <tr>
                         <th>Habilitation</th>
-                        <th>Sous Habilitation</th>
+
                       </tr>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let habil of droits">
+                      <tr >
                         <td>
-                          <input type="checkbox" value="{{habil.codeHabilitation}}" class="mr-2" >
-                          {{habil.libelle}}
-                        </td>
-                        <td>
-                          <tr>
-                            <td>
+                          <select type="select" value="{{habil.codeHabilitation}}" class="mr-2" formControlName="habilitations">
+                            <option></option>
+                          </select>
 
-                            </td>
-                          </tr>
                         </td>
-
                       </tr>
                     </tbody>
                     <tfoot>
                       <tr>
                         <th>Habilitation</th>
-                        <th>Sous Habilitation</th>
                       </tr>
                     </tfoot>
-                  </table>
+                  </table> -->
 
 
                 </div>
@@ -179,9 +178,9 @@
                   </div>
                 </td>
                 <td>
-                  <button class="btn btn-grd-info mr-2" routerLink="detail-profil" title="details" (click)="detail(profil)">
-                    <i class="feather icon-trending-up"></i>
-                  </button>
+                  <!-- <button class="btn btn-grd-info mr-2" routerLink="detail-profil" title="details" (click)="detail(profil)">
+                    <i class="fa fa-eye"></i>
+                  </button> -->
                   <button type="button" class="btn btn-success mr-2" title="éditer profil" data-toggle="modal" data-target="#editer" (click)="editer(profil)">
                     <i class="feather icon-edit-1"></i>
                   </button>

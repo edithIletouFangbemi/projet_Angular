@@ -23,56 +23,75 @@
       </li>
     </ul>
     <div class="pcoded-navigatio-lavel">Paramètres</div>
-    <ul class="pcoded-item pcoded-left-item">
+    <ul class="pcoded-item pcoded-left-item" *ngIf="visibleUtilisateur || visibleParametre || visibleProduit || visibleInstitution || visibleContrat">
       <li class="pcoded-hasmenu">
         <a href="javascript:void(0)">
           <span class="pcoded-micon"><i class="feather icon-cpu"></i></span>
           <span class="pcoded-mtext">Paramétrage</span>
         </a>
         <ul class="pcoded-submenu">
-          <li class="pcoded-hasmenu">
+          <li class="pcoded-hasmenu" *ngIf="visibleUtilisateur ">
             <a href="javascript:void(0)">
               <span class="pcoded-micon"><i class="feather icon-cpu"></i></span>
               <span class="pcoded-mtext">Utilisateur</span>
             </a>
             <ul class="pcoded-submenu">
-              <li class=" ">
+              <li class=" " *ngIf="visibleHabilitation">
                 <a type="button" routerLink="droit">
                   <span class="pcoded-mtext">Gestion des Habilitations</span>
                 </a>
               </li>
-              <li class="">
-                <a type="button" routerLink="gestion-profil">
+              <li class="" *ngIf="visibleProfil">
+                <a type="button" routerLink="gestion-profil" >
                   <span class="pcoded-mtext">Gestion Profil</span>
                 </a>
               </li>
-              <li class="">
+              <li class="" *ngIf="visibleUser">
                 <a routerLink="gestion-utilisateur">
                   <span class="pcoded-mtext">Gestion Utilisateur</span>
                 </a>
               </li>
             </ul>
           </li>
-          <li class=" ">
+          <li class=" " *ngIf="visibleParametre">
             <a routerLink="parametrage">
               <span class="pcoded-mtext">Clé</span>
             </a>
           </li>
-          <li class=" ">
+          <li class="" *ngIf="visibleParametre">
+            <a routerLink="parametre-vie">
+              <span class="pcoded-mtext">Durée de la Licence</span>
+            </a>
+          </li>
+          <li class=" " *ngIf="visibleProduit">
             <a routerLink="gestion-produit">
               <span class="pcoded-mtext">Produit</span>
             </a>
           </li>
-          <li class=" ">
+          <li class=" " *ngIf="visibleInstitution">
             <a routerLink="gestion-institution">
               <span class="pcoded-mtext">Institution</span>
             </a>
           </li>
 
-          <li class=" ">
-            <a routerLink="gestion-contrat">
+          <li class="pcoded-hasmenu" *ngIf="visibleContrat">
+            <a href="javascript:void(0)">
+              <span class="pcoded-micon"><i class="feather icon-cpu"></i></span>
               <span class="pcoded-mtext">Contrat</span>
             </a>
+            <ul class="pcoded-submenu">
+              <li class=" ">
+                <a type="button" routerLink="nouveau-contrat">
+                  <span class="pcoded-mtext">Nouveau Contrat</span>
+                </a>
+              </li>
+             
+              <li class="" >
+                <a type="button" routerLink="gestion-contrat" >
+                  <span class="pcoded-mtext">Liste Des Contrats</span>
+                </a>
+              </li>
+            </ul>
           </li>
           <li class="pcoded-hasmenu">
             <a href="javascript:void(0)">
@@ -119,20 +138,20 @@
       -->
 
     </ul>
-    <div class="pcoded-navigatio-lavel">Génération de Licence</div>
-    <ul class="pcoded-item pcoded-left-item">
-      <li class="pcoded-hasmenu">
+    <div class="pcoded-navigatio-lavel" *ngIf="visibleLicenceAgence || visibleLicencePoste" >Génération de Licence</div>
+    <ul class="pcoded-item pcoded-left-item" *ngIf="visibleLicenceAgence || visibleLicencePoste" >
+      <li class="pcoded-hasmenu" >
         <a href="javascript:void(0)">
           <span class="pcoded-micon"><i class="feather icon-command"></i></span>
           <span class="pcoded-mtext">Générer</span>
         </a>
         <ul class="pcoded-submenu">
-          <li class=" ">
+          <li class=" " *ngIf="visibleLicenceAgence">
             <a routerLink="licence-serveur">
               <span class="pcoded-mtext">Licence Agence</span>
             </a>
           </li>
-          <li class=" ">
+          <li class=" " *ngIf="visibleLicencePoste">
             <a routerLink="licence-cliente">
               <span class="pcoded-mtext">Licence Poste</span>
             </a>

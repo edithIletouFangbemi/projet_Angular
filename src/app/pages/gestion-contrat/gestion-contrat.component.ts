@@ -1,24 +1,11 @@
 import { Component } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { first } from 'rxjs';
 import { ContratInstitution } from 'src/app/model/contratInstitution';
-import { Institution } from 'src/app/model/institution';
-import { Produit } from 'src/app/model/produit';
-import { AbstractControl, ValidatorFn } from '@angular/forms';
 import { ContratInstitutionServiceService } from 'src/app/services/contratInstitution/contrat-institution-service.service';
-import { InstitutionServiceService } from 'src/app/services/institution/institution-service.service';
-import { ProduitServiceService } from 'src/app/services/produitService/produit-service.service';
-import { DynamicScriptLoaderService3 } from 'src/app/services/shared/dynamic-script-loader-service3.service';
-import Swal from 'sweetalert2';
-import { format } from 'date-fns';
-import { DatePipe } from '@angular/common';
-import { DetailContratInstitution } from 'src/app/model/detailContratInstitution';
-import { Contrat } from 'src/app/model/Contrat';
 import { DetailContratInst } from 'src/app/model/DetailContratInst';
-import { Module } from 'src/app/model/module';
-import { Agence } from 'src/app/model/agence';
-import { ElementRef, OnInit, ViewChild } from '@angular/core';
+import * as jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 @Component({
   selector: 'app-gestion-contrat',
@@ -26,172 +13,29 @@ import { ElementRef, OnInit, ViewChild } from '@angular/core';
   styleUrls: ['./gestion-contrat.component.scss']
 })
 export class GestionContratComponent {
-  create: boolean = false;
-  suite: boolean = false;
-  listeInstitution!: Institution[];
   listeContrat!: DetailContratInst[];
-  listeProduit!: Produit[];
-  selectedTypeContrat: string[] = [];
-  contratForm!: FormGroup;
-  currentDate: Date = new Date();
-  anotherDate!: Date; // Remplacez avec votre autre date
-  dateAfterAddingDays!: Date;
-  detailContrat!: DetailContratInstitution;
-  form!: FormGroup;
-  listeModule!: Module[];
-  listeAgence!: Agence[];
-  avenantForm!: FormGroup;
-  numberEntered!: number;
-  selectedItems!: [];
-
-  @ViewChild('regForm') regForm: ElementRef | undefined; // Assurez-vous que l'élément a un référencement dans le template
-
-
-  constructor(private dynamicScriptLoader: DynamicScriptLoaderService3,
-    private _formBuilder : FormBuilder,
+  constructor(
     private contratService: ContratInstitutionServiceService,
-    private produitService: ProduitServiceService,
     private _router : Router,
-    private institutionService: InstitutionServiceService,
-    datePipe: DatePipe
-    ){
-      this.currentDate = new Date();
-
-    }
+    ){}
 
     ngOnInit(): void {
-      this.loadScripts()
-      this.initForm()
       this.lister()
-      this.listerInstitution()
-      this.listerProduit()
-      this.getAgence()
-
     }
-    getDate(){
+    details(contrat: DetailContratInst){
+      const data : DetailContratInst = contrat;
 
-
-
+      this._router.navigate(["base/detail-contrat"], { queryParams: data})
     }
 
-    nouveau(){
-      this.create = !this.create;
-    }
+    editer(contrat: ContratInstitution){
+      this.contratService.getOne(contrat.codeContrat).pipe(first()).subscribe({
 
-    suivant(){
-      this.suite = !this.suite;
-    }
-
-    newContrat(){
-      const data2 : Contrat = Object.assign({},this.form.value);
-      console.log(data2)
-      this.contratService.save(data2).pipe(first()).subscribe({
-        next: data=>{
-          this.create !== this.create;
-          this.form.reset()
-          this.lister()
-
-          Swal.fire({
-            title: 'Contrat Crée avec succès',
-            text: 'voulez vous activer les modules standard de ces produits aux agences?',
-            icon: 'question',
-            confirmButtonText: 'Oui',
-            cancelButtonText: 'Non',
-            showCancelButton: true,
-        }).then((result)=>{
-          if(result.isConfirmed){
-            const data2: Institution = data;
-            this._router.navigate(["base/activer"] , {queryParams: data2})
-          }
-        })
-        },
-        error: error=>{
-          console.log(error)
-          this.form.reset()
-          Swal.fire("Echec",error.error,"error")
-        }
-      })
-    }
-    activerPourAgence(codeModule: string){
-
-    }
-
-
-
-    onNameContratInput(event: any, name: string) {
-      const input = event.target;
-      const value = input.value;
-      const pattern = /^[0-9]*$/;
-
-      if (!pattern.test(value)) {
-        input.value = value.replace(/[^0-9]/g, ''); // Filtrer les caractères non autorisés
-      }
-
-      this.contratForm.controls[name].setValue(input.value);
-      }
-
-    initForm(){
-      this.form = this._formBuilder.group({
-        institution: ["",[Validators.required]],
-        contratUnits: this._formBuilder.array([])
-      })
-    }
-
-    get contratUnits(){
-      return this.form.get('contratUnits') as FormArray
-    }
-
-    CreateItem(): void {
-      const item = this._formBuilder.group({
-        produit:[null, [Validators.required]],
-        typeContrat:[null, [Validators.required]],
-        modules: [null, [Validators.required]],
-        agences: [null, [Validators.required]],
-        nbrPoste:[null],
-        nbrAgence:[null],
-        dateDebut:[null],
-        dateFin:[null],
-      } )
-      let elt: string = "";
-      this.selectedTypeContrat.push(elt);
-
-      this.contratUnits.push(item)
-    }
-
-    RemoveItem(i:number){
-      this.selectedTypeContrat.splice(i,1)
-      this.contratUnits.removeAt(i)
-    }
-
-    annulerForm() {
-      this.initForm()
-      this.create === !this.create
-    }
-
-    getModule(i: number){
-      this.contratService.getModule(this.contratUnits.controls[i].get('produit')?.value).pipe(
-        first()
-      ).subscribe({
-        next: data =>{
-            this.listeModule = data;
-        },
-        error: error => console.log(error)
-      })
-    }
-
-    getAgence(){
-      this.form.get('institution')?.valueChanges.subscribe(value=>{
-        this.institutionService.getAgenceByInstitution(value).pipe(first()).subscribe({
-          next: data=>{
-              this.listeAgence = data
-          }, error: error=>{
-            console.log(error)
-          }
-        })
       })
     }
 
     lister(){
+      this.listeContrat = []
       this.contratService.getAll().pipe(first()).subscribe({
         next: data =>{
           this.listeContrat = data;
@@ -208,100 +52,83 @@ export class GestionContratComponent {
       })
     }
 
-    listerInstitution(){
-      this.contratService.institutions().pipe(first()).subscribe({
-        next: (data)=>{
-          this.listeInstitution = data;
+    generatePDF() {
+      const doc = new jsPDF.default();
+
+      // Ajouter le logo de l'école
+      const logoUrl = '../../../assets/files/assets/images/cagecfi.jpg';
+      const logoWidth = 35;
+      const logoHeight = 45;
+      doc.addImage(logoUrl, 'JPEG', 15, 15, logoWidth, logoHeight);
+
+      // Utiliser une police personnalisée pour le titre
+      doc.setFont('Montserrat', 'bold');
+      doc.setFontSize(20);
+      doc.setTextColor('#4285F4'); // Couleur du titre
+      doc.text('Rapport des Contrats', 70, 30);
+
+      // Utiliser une police personnalisée pour les informations sur l'école
+      doc.setFont('Montserrat', 'normal');
+      doc.setFontSize(12);
+      doc.setTextColor('#000000'); // Couleur du texte
+      doc.text('CAGECFI SA', 70, 40);
+      doc.text('Adresse : Boulevard Gnassingbé Eyadema', 70, 45);
+      doc.text('Téléphone : +228 22 26 84 61', 70, 50);
+      doc.text('Email : cagecfi@cagecfi.com', 70, 55);
+
+      // Tableau de colonnes
+      const columns = [
+        'NOM INSTITUTION',
+        'TYPE ARCHITECTURE',
+        'NOMBRE PRODUIT'
+      ];
+
+      // Tableau de lignes
+      const rows = this.listeContrat.map((contrat: any) => [
+        contrat.nomInst,
+        contrat.typeArchitecture,
+        contrat.nbrProduit,
+      ]);
+
+      // Générer le PDF avec le tableau en utilisant 'autoTable'
+      (doc as any).autoTable({
+        head: [columns],
+        body: rows,
+        startY: 70,
+        theme: 'striped', // Utiliser un thème de tableau prédéfini pour un meilleur rendu
+        styles: {
+          font: 'Montserrat', // Utiliser la police personnalisée
+          fontSize: 10,
+          cellPadding: 5,
         },
-        error: error=> console.log(error)
-      })
-    }
+        headStyles: {
+          fillColor: '#4285F4', // Couleur de fond de l'en-tête du tableau
+          textColor: '#ffffff', // Couleur du texte de l'en-tête du tableau
+          halign: 'center', // Alignement horizontal du texte de l'en-tête du tableau
+        },
+        bodyStyles: {
+          halign: 'center', // Alignement horizontal du texte du corps du tableau
+        },
+      });
 
-    onNameInput(event: any, name: string) {
-      const input = event.target;
-      const value = input.value;
-      const pattern = /^[a-zA-Z-0-9 ]*$/;
+      // Ajouter un pied de page
+      doc.setFont('Montserrat', 'italic');
+      doc.setFontSize(14);
+      doc.setTextColor('#666666'); // Couleur du pied de page
+      doc.text(
+        '© cagecfi sa de Lomé ' + new Date().getFullYear(),
+        doc.internal.pageSize.getWidth() / 2,
+        doc.internal.pageSize.getHeight() - 15,
+        { align: 'center' }
+      );
+      const pdfOutput = doc.output('dataurlnewwindow');
 
-      if (!pattern.test(value)) {
-        input.value = value.replace(/[^a-zA-Z]/g, ''); // Filtrer les caractères non autorisés
-      }
-
-      this.avenantForm.controls[name].setValue(input.value);
-
-      }
-
-    onNameAgenceInput(event: any, name: string) {
-      const input = event.target;
-      const value = input.value;
-      const pattern = /^[a-zA-Z-0-9 ]*$/;
-
-      if (!pattern.test(value)) {
-        input.value = value.replace(/[^a-zA-Z-0-9]/g, ''); // Filtrer les caractères non autorisés
-      }
-
-      this.avenantForm.controls[name].setValue(input.value);
-      }
-
-    listerProduit(){
-      this.form.get('institution')?.valueChanges.subscribe(value=>{
-        this.contratService.produits(value).pipe(first()).subscribe({
-          next: data=>{
-            this.listeProduit = data;
-          },
-          error: error=> console.log(error)
-        })
-      })
-
+      // Sauvegarder le PDF avec le nom de l'école
+      //doc.save('Université_de_Lomé_Rapport_Etudiants.pdf');
     }
 
 
 
-    details(contrat: DetailContratInst){
-      const data : DetailContratInst = contrat;
-
-      this._router.navigate(["base/detail-contrat"], { queryParams: data})
-    }
-
-    editer(contrat: ContratInstitution){
-      this.contratService.getOne(contrat.codeContrat).pipe(first()).subscribe({
-
-      })
-    }
-
-
-    private loadScripts() {
-      // You can load multiple scripts by just providing the key as argument into load method of the service
-      this.dynamicScriptLoader.load(
-      'jquery.min',
-      'jquery-ui',
-      'popper',
-      'bootstrap.min',
-      'slimScroll',
-      'modernizr',
-      'scrollBar',
-      'datatablesJquery',
-      'datatableButton',
-      'jszip',
-      'pdfmake',
-      'vfs_fonts',
-      'print',
-      'html5',
-      'bootstrap4',
-      'dataTables.responsive',
-      'responsive.bootstrap4',
-      'i18next',
-      'i18nextXHRBackend',
-      'languagedetector',
-      'jquery-i18next',
-      'data-table-custom',
-      'pcoded',
-      'vartical-layout',
-      'mCustomScrollbar',
-      'script'
-      ).then(data => {
-        // Script Loaded Successfully
-      }).catch(error => console.log(error));
-    }
 
 
 

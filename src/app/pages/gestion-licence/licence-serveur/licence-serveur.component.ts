@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+
 import { first } from 'rxjs';
 import { Agence } from 'src/app/model/agence';
 import { Institution } from 'src/app/model/institution';
 import { LicenceServeur } from 'src/app/model/licenceServeur';
 import { LicenceServeurReturn } from 'src/app/model/licenceServeurReturn';
+import { Module } from 'src/app/model/module';
+import { Produit } from 'src/app/model/produit';
 import { ContratInstitutionServiceService } from 'src/app/services/contratInstitution/contrat-institution-service.service';
 import { InstitutionServiceService } from 'src/app/services/institution/institution-service.service';
 import { LicenceServeurService } from 'src/app/services/licenceService/licenceServeurService/licence-serveur.service';
@@ -19,27 +23,33 @@ export class LicenceServeurComponent implements OnInit {
   constructor(private _formBuilder: FormBuilder,
     private contratService: ContratInstitutionServiceService,
     private institutionService: InstitutionServiceService,
-    private licenceService: LicenceServeurService
+    private licenceService: LicenceServeurService,
+    private _router : Router
     ){}
 
   licenceForm!:FormGroup;
   listeInstitution!: Institution[]
   listeAgence!: Agence[]
-  listeRetour:LicenceServeurReturn[] = []
+  listeRetour:LicenceServeurReturn[] = [];
+  listeProduit: Produit[] = [];
+  listeModule: Module[] = [];
+  codeProduit: string = "";
 
   ngOnInit(){
     this.initForm()
-    this.getAgence()
     this.getInstitution()
+    this.getProduitByInstitution()
+    this.getModuleByAgenceAndProduit()
+    this.getAgence()
     this.all()
-
-
   }
 
   initForm(){
     this.licenceForm = this._formBuilder.group({
       institutionCode: ["",[Validators.required]],
-      agenceCode: ["",[Validators.required]]
+      agenceCode: ["",[Validators.required]],
+      produit: ["",[Validators.required]],
+      modules: ["",[Validators.required]]
     })
   }
 
@@ -54,7 +64,6 @@ export class LicenceServeurComponent implements OnInit {
   }
 
   getAgence(){
-    this.listeAgence = []
     this.licenceForm.get('institutionCode')?.valueChanges.subscribe((value) => {
       this.licenceService.agences(value).pipe(first()).subscribe({
         next: data=>{
@@ -67,23 +76,62 @@ export class LicenceServeurComponent implements OnInit {
     });
   }
 
+  getProduitByInstitution(){
+    this.licenceForm.get('institutionCode')?.valueChanges.subscribe((value)=>{
+      this.codeProduit = value;
+      this.licenceService.getProduit(value).pipe(first()).subscribe({
+        next: data =>{
+            this.listeProduit = data
+        },
+        error:(error)=>{
+          console.log(error)
+        }
+      })
+    })
+  }
+
+  getModuleByAgenceAndProduit(){
+      this.licenceForm.get('agence')?.valueChanges.subscribe(value=>{
+        this.licenceService.getModule(this.codeProduit, value).pipe(first()).subscribe({
+          next: data =>{
+              this.listeModule = data
+          },
+          error: error=>{
+            console.log(error)
+          }
+        })
+      })
+  }
+
+
+
   save(){
     const data : LicenceServeur = Object.assign({}, this.licenceForm.value)
     console.log(data)
     this.licenceService.save(data).pipe(first()).subscribe({
       next: data=>{
-        this.all()
         this.initForm()
-        this.getAgence()
+        this.all()
         this.getInstitution()
-        location.reload
-        Swal.fire("Reussite","opération reussie","success")
+        this.getAgence()
+        Swal.fire({
+          title:"Reussite",
+          text:"Licence générée avec succès",
+          icon: "success",
+          confirmButtonText:"Télécharger le fichier",
+          cancelButtonText: "Annuler",
+
+        }).then((result)=>{
+          if(result.isConfirmed){
+            this.download(data)
+          }
+        })
 
       },
       error: error=>{
         console.log(error)
         this.initForm()
-        Swal.fire("Echec",error.error,"error")
+        Swal.fire("Echec",error.error.message,"error")
       }
     })
   }
@@ -91,15 +139,34 @@ export class LicenceServeurComponent implements OnInit {
   all(){
     this.licenceService.all().pipe(first()).subscribe({
       next: data =>{
+        console.log(data)
         this.listeRetour = data;
       },
       error: error=> console.log(error)
     })
   }
 
-  desactiver(code:string){
+  detail(institution: Institution){
+    const data : Institution =  Object.assign ({}, institution);
+
+   this._router.navigate(['base/detail-licence-serveur'], {queryParams: data});
+  }
+
+  download(liste: any){
+    if(liste !== null){
+      try{
+        const blob = new Blob([liste],{type:'application/octet-stream'});
+        const url = window.URL.createObjectURL(blob);
+        window.open(url);
+      }
+      catch(error){
+        Swal.fire("Erreur", "une erreur s'est produite","error")
+      }
+
+    }
 
   }
+
 
 
 }

@@ -33,19 +33,16 @@ export class ResetComponent {
           localStorage.setItem('isLogged',"true");
           localStorage.setItem('currentUser', JSON.stringify(data))
           localStorage.setItem('token', data.token)
-          
+          localStorage.setItem('habilitations', JSON.stringify(data.profil.habilitations))
           this._router.navigateByUrl("/base/dashboard");
         })
 
       },
       error: error =>{
         Swal.fire(
-          {
-            title:"Erreur de Connexion",
-            text:"Identiifiant incorrectes, Reprenez!",
-            icon: "error",
-            confirmButtonText:"OK"
-          }
+         "Echec",
+         error.error.message,
+         "error"
         );
         console.log(error)
         location.reload
@@ -64,6 +61,14 @@ export class ResetComponent {
       password : ["", [Validators.required]]
     })
 
+  }
+
+  get email(){
+    return this.formLogin.get('email');
+  }
+
+  get password(){
+    return this.formLogin.get('password');
   }
 
 

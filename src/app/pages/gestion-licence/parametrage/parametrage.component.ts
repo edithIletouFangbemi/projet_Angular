@@ -5,7 +5,7 @@ import { Parametre } from 'src/app/model/parametre';
 import { ParametreRequest } from 'src/app/model/parametreRequest';
 import { ParametreServiceService } from 'src/app/services/parametre/parametre-service.service';
 import Swal from 'sweetalert2';
-import { format } from 'date-fns';
+import {  format } from 'date-fns';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -32,6 +32,7 @@ export class ParametrageComponent implements OnInit{
   listeParametre!: Parametre[]
   parametre!:ParametreRequest;
   currentDate: Date = new Date()
+  anotherDate: Date = new Date()
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -46,11 +47,22 @@ export class ParametrageComponent implements OnInit{
     this.listerParametre()
     this.currentDate
 
+    this.getDate()
+
+  }
+
+  getDate(){
+    this.parametreForm.get('dateDebut')?.valueChanges.subscribe(value=>{
+      this.anotherDate = new Date(value)
+      //const days = differenceInDays(this.anotherDate , this.currentDate) + 1
+      this.anotherDate.setDate(this.anotherDate.getDate() + 1)
+    })
   }
 
   initForm(){
     this.parametreForm = this._formBuilder.group({
       dateDebut: ["",[Validators.required]],
+      dateFin: [""],
       parametres: this._formBuilder.group({
         adresseIp:[""],
         adresseMac: [""],
@@ -58,21 +70,37 @@ export class ParametrageComponent implements OnInit{
         idDisqueDur: [""]
       })
     });
+
+
 
 
     this.editForm = this._formBuilder.group({
       codeParametre:[""],
       dateDebut: ["",[Validators.required]],
+      dateFin: [""],
       parametres: this._formBuilder.group({
         adresseIp:[""],
         adresseMac: [""],
         idMachine:[""],
         idDisqueDur: [""]
-      })
+      }, [Validators.required])
     });
 
 
+
   }
+  get dateDebut(){
+    return this.parametreForm.get('dateDebut')
+  }
+
+  get dateFin(){
+    return this.parametreForm.get('dateFin')
+  }
+
+  get paramet(){
+    return this.parametreForm.get('parametres')
+  }
+
 
    selectedValues!: string[]
   onCheckboxChange(): void{
@@ -146,11 +174,11 @@ export class ParametrageComponent implements OnInit{
         this.parametre.dateDebut = data.dateDebut;
         this.parametre.dateFin = data.dateFin;
         this.parametre.parametres = parametres;
-        this.parametre.dateDebut = new Date(this.parametre.dateDebut)
-        this.parametre.dateDebutFormatee = format(this.parametre.dateDebut, 'dd/MM/yyyy');
+        this.parametre.dateFinFormatee = format(new Date(this.parametre.dateFin), 'dd/MM/yyyy');
+        this.parametre.dateDebutFormatee = format(new Date(this.parametre.dateDebut), 'dd/MM/yyyy');
 
-        this.editForm.get("dateDebut")?.patchValue(this.parametre.dateDebut);
-        this.editForm.get("dateFin")?.patchValue(this.parametre.dateFin);
+        this.editForm.get("dateDebut")?.patchValue(this.parametre.dateDebutFormatee);
+        this.editForm.get("dateFin")?.patchValue(this.parametre.dateFinFormatee);
         this.editForm.get("codeParametre")?.patchValue(this.parametre.codeParametre);
 
         if (this.parametre.parametres.includes("adresseIp")) {
@@ -191,7 +219,7 @@ export class ParametrageComponent implements OnInit{
         this.listeParametre = data;
 
         this.listeParametre.forEach(param=>{
-          param.dateDebut = new Date(param.dateDebut);
+
           this.selectedValues= param.description.split(',');
           param.parametres = []
 
@@ -212,10 +240,9 @@ export class ParametrageComponent implements OnInit{
 
 
           // Formater les dates
-          param.dateDebutFormatee = format(param.dateDebut, 'dd/MM/yyyy');
+          param.dateDebutFormatee = format(new Date(param.dateDebut), 'dd/MM/yyyy');
           if(param.dateFin !== null){
-            param.dateFin = new Date(param.dateFin);
-            param.dateFinFormatee = format(param.dateFin, 'dd/MM/yyyy');
+            param.dateFinFormatee = format(new Date(param.dateFin), 'dd/MM/yyyy');
           }
           this.dataSource = new MatTableDataSource(this.listeParametre );
           this.dataSource.paginator = this.paginator;

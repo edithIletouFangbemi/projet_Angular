@@ -46,6 +46,11 @@ import { DataTablesModule } from 'angular-datatables';
 import { ActiverComponent } from './pages/gestion-contrat/activerModule/activer/activer.component';
 import { ActiverModuleComponent } from './pages/Agence/activation/activer-module/activer-module.component';
 import { ChartModule } from 'angular-highcharts';
+import { DetailLicenceComponent } from './pages/gestion-licence/licence-serveur/detail/detail-licence/detail-licence.component';
+import { DureeVieComponent } from './pages/duree_vie/duree-vie/duree-vie.component';
+import { DetailPosteComponent } from './pages/gestion-licence/detail-poste-licence/detail-poste/detail-poste.component';
+import { CreerContratComponent } from './pages/gestion-contrat/creer-contrat/creer-contrat.component';
+import { BasicInlineEditingComponent } from './pages/basic-inline/basic-inline-editing/basic-inline-editing.component';
 
 
 
@@ -83,6 +88,11 @@ import { ChartModule } from 'angular-highcharts';
     DetailAgenceComponent,
     ActiverComponent,
     ActiverModuleComponent,
+    DetailLicenceComponent,
+    DureeVieComponent,
+    DetailPosteComponent,
+    CreerContratComponent,
+    BasicInlineEditingComponent,
 
   ],
 
@@ -94,9 +104,10 @@ import { ChartModule } from 'angular-highcharts';
     FormsModule,
     ReactiveFormsModule,
     MatDialogModule,
-    HighchartsChartModule,
     DataTablesModule,
+    HighchartsChartModule,
     ChartModule,
+
 
   ],
   providers: [

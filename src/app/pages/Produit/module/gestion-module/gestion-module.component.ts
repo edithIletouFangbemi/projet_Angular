@@ -58,9 +58,9 @@ export class GestionModuleComponent implements OnInit {
     const data2 : Module = Object.assign({}, this.editModuleForm.value)
     this.produitService.updateModule(data2.codeModule, data2).pipe(first()).subscribe({
       next: data =>{
-        console.log(data)
-        Swal.fire("Reussite","opération reussie",'success')
         this.getModules()
+        Swal.fire("Reussite","opération reussie",'success')
+
       },
       error: error=>{
         console.log(error)

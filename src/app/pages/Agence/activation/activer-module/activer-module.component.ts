@@ -23,6 +23,7 @@ export class ActiverModuleComponent implements OnInit {
   form!: FormGroup;
   listeModule: Module[] = []
   currentDate: Date = new Date()
+  anotherDate: Date = new Date()
 
 
   constructor(
@@ -50,7 +51,9 @@ export class ActiverModuleComponent implements OnInit {
   this.initForm()
   this.addValue(this.agence.codeAgence, this.agence.InstitutionCode)
   this.getProduit(this.agence.InstitutionCode)
-  this.getModule()
+  this.getModule(this.agence.codeAgence)
+
+  this.getDate()
    }
 
    getProduit(codeInst: string){
@@ -68,10 +71,11 @@ export class ActiverModuleComponent implements OnInit {
     })
    }
 
-   getModule(){
+   getModule(codeAgence:string){
+    this.listeModule = []
     console.log(this.form.get('codeAgence')?.value)
     this.form.get('codeProduit')?.valueChanges.subscribe(value=>{
-      this.institutionService.getModule(this.form.get('codeAgence')?.value, value).pipe(first()).subscribe({
+      this.institutionService.getModule(codeAgence, value).pipe(first()).subscribe({
         next: data=>{
             this.listeModule = data
             console.log(data)
@@ -98,8 +102,10 @@ export class ActiverModuleComponent implements OnInit {
       const data : ActivationRequest = Object.assign({}, this.form.value)
       this.institutionService.activateModule(data).pipe(first()).subscribe({
         next: data =>{
-          Swal.fire("Reussite", "activation fait avec succès","success")
+          this.getModule(data.codeAgence)
           this.initForm()
+          Swal.fire("Reussite", "activation fait avec succès","success")
+
         },
         error: error=>{
           console.log(error)
@@ -137,6 +143,11 @@ export class ActiverModuleComponent implements OnInit {
     let elt: string = "";
     this.selectedTypeContrat.push(elt);
     this.modules.push(item)
+  }
+  getDate(){
+    this.form.get('modules.dateDebut')?.valueChanges.subscribe(value=>{
+      this.anotherDate.setDate((new Date(value)).getDate() + 1 )
+    })
   }
 
   RemoveItem(i:number){

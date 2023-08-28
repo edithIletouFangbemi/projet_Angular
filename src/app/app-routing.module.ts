@@ -28,6 +28,13 @@ import { DetailContratComponent } from './pages/gestion-contrat/detail/detail-co
 import { DetailAgenceComponent } from './pages/Agence/detail-agence/detail-agence.component';
 import { ActiverComponent } from './pages/gestion-contrat/activerModule/activer/activer.component';
 import { ActiverModuleComponent } from './pages/Agence/activation/activer-module/activer-module.component';
+import { DetailLicenceComponent } from './pages/gestion-licence/licence-serveur/detail/detail-licence/detail-licence.component';
+import { DureeVieComponent } from './pages/duree_vie/duree-vie/duree-vie.component';
+import { TokenExpirationGuardService } from './services/Utils/tokenGard/token-expiration-guard.service';
+import { DetailComponent } from './pages/gestion-licence/detail/detail.component';
+import { DetailPosteComponent } from './pages/gestion-licence/detail-poste-licence/detail-poste/detail-poste.component';
+import { CreerContratComponent } from './pages/gestion-contrat/creer-contrat/creer-contrat.component';
+import { BasicInlineEditingComponent } from './pages/basic-inline/basic-inline-editing/basic-inline-editing.component';
 
 
 
@@ -46,10 +53,7 @@ const routes: Routes = [
     component: ModifierComponent
   }
 
-  ,{
-    path:"new",
-    component:NewComponent
-  }
+
   ,{
     path:'base',
     component: BaseComponent,
@@ -133,6 +137,31 @@ const routes: Routes = [
         path:'activation',
         component:ActiverModuleComponent
       }
+      ,{
+          path:'detail-licence-serveur',
+          component: DetailLicenceComponent
+      }
+      ,{
+        path:'parametre-vie',
+        component:DureeVieComponent
+    }
+    ,{
+      path:'detail-licence-cliente',
+      component:DetailComponent
+  }
+    ,{
+      path:'detail-poste',
+      component:DetailPosteComponent
+  }
+
+  ,{
+    path:'nouveau-contrat',
+    component:CreerContratComponent
+}
+,{
+  path:'basic',
+  component:BasicInlineEditingComponent
+}
 
 
 

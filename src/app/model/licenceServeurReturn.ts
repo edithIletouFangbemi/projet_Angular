@@ -1,12 +1,12 @@
 import { Agence } from "./agence";
 import { Institution } from "./institution";
 
-export class LicenceServeurReturn
+export interface LicenceServeurReturn
 {
-  code!: string;
-  agence!: Agence;
-  institution!: Institution;
-  statut!: any;
-  dateCreation!: Date;
-  typeContrat!: string;
+  code: string;
+  agence: Agence;
+  institution: Institution;
+  statut: any;
+  dateCreation: Date;
+  nbrLicenceServeur: number;
 }

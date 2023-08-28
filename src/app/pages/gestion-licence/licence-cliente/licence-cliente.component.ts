@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { LicenceRecapRequest } from 'src/app/model/licenceRecapRequest';
+import { Router } from '@angular/router';
 
 
 pdfMake!.vfs = pdfFonts.pdfMake.vfs;
@@ -23,18 +24,20 @@ pdfMake!.vfs = pdfFonts.pdfMake.vfs;
 })
 export class LicenceClienteComponent implements OnInit{
   constructor(private _formBuilder: FormBuilder,
-    private licenceService: LicenceClienteServiceService
+    private licenceService: LicenceClienteServiceService,
+    private _router: Router
     ){}
 
   formLicence!:FormGroup;
-  institutions!: Institution[];
-  agences!: Agence[];
-  modules!: Module[];
-  produits!: Produit[];
-  listeLicence!: LicenceClienteReturn[];
-  selectedInstitution: string="";
+  institutions: Institution[] = [];
+  agences: Agence[] = [];
+  modules: Module[] = [];
+  produits: Produit[] = [];
+  listeLicence: LicenceClienteReturn[] = [];
   backendData!: any
-  listeRecap!: LicenceRecapRequest[]
+  listeRecap!: LicenceRecapRequest[];
+  produitCode!: string;
+  institutionCode!: string;
 
 
   allowedFormats: string[] = ['xml', 'json'];
@@ -44,8 +47,43 @@ export class LicenceClienteComponent implements OnInit{
   ngOnInit(){
     this.initForm()
     this.listerInstitution()
-    this.agenceByInstitution()
     this.getByProduit()
+
+
+    this.formLicence.get('institution')?.valueChanges.subscribe((value) => {
+        this.institutionCode = value;
+        console.log("code institution "+this.produitCode)
+    });
+      this.formLicence.get('produit')?.valueChanges.subscribe((value)=>{
+        this.produitCode = value;
+        console.log("code produit "+this.produitCode)
+
+        this.licenceService.agences(this.institutionCode,this.produitCode).pipe(first()).subscribe({
+          next: data=>{
+              this.agences = data;
+              console.log(data)
+              console.log(this.agences)
+          },
+          error: error=>{
+            console.log(error)
+          }
+         })
+      })
+
+      this.formLicence.get('agence')?.valueChanges.subscribe((value) => {
+        this.licenceService.modules(value,this.produitCode).pipe(first()).subscribe({
+          next: data=>{
+            this.modules = data;
+          },
+          error: error=> console.log(error)
+        })
+      });
+
+
+
+
+
+
     this.module()
     this.lister()
   }
@@ -102,7 +140,18 @@ save() {
                 console.log(response)
 
                 this.lister()
-                Swal.fire('Reussite', 'Opération réussie', 'success');
+                Swal.fire({
+                  title: 'Reussite',
+                  text:'génération de licence effectuée avec succès!',
+                  icon: "success",
+                  confirmButtonText: "Télécharger le fichier",
+                  cancelButtonText:"Annuler"
+
+                } ).then((result)=>{
+                  if(result.isConfirmed){
+                    this.download(response)
+                  }
+                });
                 this.formLicence.reset()
 
               },
@@ -132,16 +181,48 @@ save() {
     })
   }
 
-  download(){
-    if(this.backendData !== null){
-      const blob = new Blob([this.backendData],{type:'application/octet-stream'});
-      const url = window.URL.createObjectURL(blob);
-      window.open(url);
-    }
-
+  getLicence(codeLicence: string){
+    this.licenceService.getLicence(codeLicence).pipe(first()).subscribe({
+      next: data =>{
+        
+      }
+    })
   }
 
+  download(licence: LicenceClienteReturn){
 
+    if(licence !== null){
+      try{
+
+        const data : any = licence
+        let fileContent = "";
+        for (const [key, value] of Object.entries(data)) {
+          fileContent += `${key}: ${value}\n`;
+        }
+
+        let filename = licence.agence.nom +"."+licence.dateCreation.getDate();
+        const blob = new Blob([fileContent],{type:'application/octet-stream'});
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        link.click();
+
+       // const url = window.URL.createObjectURL(blob);
+        window.open(url);
+      }
+      catch(error){
+        Swal.fire('Echec', "Une erreur s'est produite", 'error');
+      }
+    }
+  }
+
+  detail(recap : LicenceRecapRequest){
+    const data : LicenceRecapRequest = Object.assign({}, recap)
+    this._router.navigate(["base/detail-licence-cliente"], {queryParams: data})
+  }
+
+/*
   generatePDF(){
 
     const documentDefinition = {
@@ -171,7 +252,7 @@ save() {
 
     pdfMake!.createPdf(documentDefinition).open();
   }
-
+*/
 
 
 
@@ -180,6 +261,8 @@ save() {
     this.licenceService.institutions().pipe(first()).subscribe({
       next: data =>{
         this.institutions = data
+        console.log("institutions data")
+        console.log(this.institutions)
       },
       error: error=>console.log(error)
     })
@@ -187,22 +270,8 @@ save() {
 
 
 
-  agenceByInstitution(){
-    this.agences = [];
-    this.formLicence.get('institution')?.valueChanges.subscribe((value) => {
-      this.licenceService.agences(value).pipe(first()).subscribe({
-        next: data=>{
-            this.agences = data;
-        },
-        error: error=>{
-          console.log(error)
-        }
-       })
-    });
-  }
-
   getByProduit(){
-    this.produits = [];
+
     this.formLicence.get('institution')?.valueChanges.subscribe((value) => {
       this.licenceService.produits(value).pipe(first()).subscribe({
         next: data=>{
@@ -216,15 +285,7 @@ save() {
 
   module(){
     this.modules = [];
-    this.formLicence.get('produit')?.valueChanges.subscribe((value) => {
-      let agence = this.formLicence.get('agence')?.value;
-      this.licenceService.modules(agence,value).pipe(first()).subscribe({
-        next: data=>{
-          this.modules = data;
-        },
-        error: error=> console.log(error)
-      })
-    });
+
   }
   reset(){
     this.formLicence.reset()

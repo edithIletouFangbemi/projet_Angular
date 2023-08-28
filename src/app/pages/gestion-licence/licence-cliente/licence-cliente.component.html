@@ -85,6 +85,16 @@
                               </div>
                               <div class="row form-group">
                                 <div class="col-sm-3">
+                                  <label class="feather col-form-label">Produit:</label>
+                                </div>
+                                <div class="col-sm-9">
+                                  <select class="form-control" required formControlName="produit">
+                                    <option *ngFor="let produit of produits" [value]="produit.codeProduit">{{produit.nom}}</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div class="row form-group">
+                                <div class="col-sm-3">
                                   <label class="feather col-form-label">Agence:</label>
                                 </div>
                                 <div class="col-sm-9">
@@ -94,16 +104,7 @@
                                 </div>
                               </div>
 
-                              <div class="row form-group">
-                                <div class="col-sm-3">
-                                  <label class="feather col-form-label">Produit:</label>
-                                </div>
-                                <div class="col-sm-9">
-                                  <select class="form-control" required formControlName="produit">
-                                    <option *ngFor="let produit of produits" [value]="produit.codeProduit">{{produit.nom}}</option>
-                                  </select>
-                                </div>
-                              </div>
+
                               <div class="row form-group">
                                   <div class="col-sm-3">
                                     <label class="feather col-form-label">Modules:</label>
@@ -136,33 +137,19 @@
                   <thead>
                     <tr>
                       <th>Institution</th>
-                      <th>Agence</th>
-                      <th>Type de Contrat</th>
-                      <th>Nbr Licence</th>
-
+                      <th>Type d'Architecture</th>
+                      <th>Nbr Produit Actif</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr *ngFor="let recap of listeRecap">
                       <td>{{recap.nomInst}}</td>
-                      <td>{{recap.nom}}</td>
-                      <td>{{recap.typeContrat}}</td>
-                      <td>{{recap.nbrPoste}}</td>
-                      <!--
-                           <td>
-                        <div class="label-main">
-                          <label class="label label-danger">Désactivé</label>
-                        </div>
-                        <div class="label-main">
-                          <label class="label label-success">active</label>
-                        </div>
-                      </td>
-                      -->
-
+                      <td>{{recap.typeArchitecture}}</td>
+                      <td>{{recap.nbrProduitActif}}</td>
                       <td>
-                        <button class="btn btn-success mr-2" title="detail">
-                          <i class=" feather icon-trending-up"></i>
+                        <button class="btn btn-success mr-2" title="detail" (click)="detail(recap)">
+                          <i class="fa fa-eye"></i>
                         </button>
                       </td>
                     </tr>
@@ -171,9 +158,8 @@
                   <tfoot>
                     <tr>
                       <th>Institution</th>
-                      <th>Agence</th>
-                      <th>Type de Contrat</th>
-                      <th>Nbr Licence</th>
+                      <th>Type d'Architecture</th>
+                      <th>Nbr Produit Actif</th>
                       <th>Actions</th>
                     </tr>
                   </tfoot>
@@ -195,8 +181,8 @@
 
 
 
-<div>
+<!-- <div>
         <h6>Licence Générée</h6>
       </div>
-      <button (click)="download()">Télécharger le PDF</button>
+      <button (click)="download()">Télécharger le PDF</button> -->
 

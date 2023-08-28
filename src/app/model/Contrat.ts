@@ -1,7 +1,11 @@
 import { ContratUnit } from "./ContratUnit";
 
-
-export class Contrat{
-  institution!: string;
-  contratUnits!: ContratUnit[];
+export interface Contrat {
+  institution: string
+  produit: string
+  typeContrat: string
+  nbrAgence: number
+  dateDebut: Date
+  dateFin: Date
+  contratUnits: ContratUnit[]
 }

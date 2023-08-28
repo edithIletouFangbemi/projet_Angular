@@ -35,8 +35,6 @@ export class DetailAgenceComponent implements OnInit {
     });
     this.institutionCheck()
     this.getContrat()
-
-
   }
 
   institutionCheck(){

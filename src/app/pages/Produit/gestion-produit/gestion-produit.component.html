@@ -68,14 +68,14 @@
                         </div>
                       </td>
                       <td>
-                        <button class="btn btn-info mr-2" *ngIf="produit.nbrModuleStandard >0 || produit.nbrModuleAdditionnel> 0 " title="details" (click)="details(produit.codeProduit)">
-                          <i class="feather icon-trending-up"></i>
+                        <button class="btn btn-success mr-2" *ngIf="produit.nbrModuleStandard >0 || produit.nbrModuleAdditionnel> 0 " title="details" (click)="details(produit.codeProduit)">
+                          <i class="fa fa-eye"></i>
                         </button>
                         <button type="button" class="btn btn-warning mr-2" title="éditer" data-toggle="modal" data-target="#editer" (click)="editer(produit.codeProduit)">
                           <i class="feather icon-edit-1"></i>
                         </button>
                         <button type="button" class="btn btn-success mr-2" title="ajouter module" data-toggle="modal" data-target="#module" (click)="getProduitCode(produit.codeProduit)" >
-                          <i class="feather icon-clipboard"></i>
+                          <i class="fa fa-plus"></i>
                         </button>
                         <button type="button" title="désactiver" *ngIf="produit.statut === 1" class="btn btn-danger mr-2" (click)="desactiver(produit.codeProduit)">
                           <i class="feather icon-trash-2"></i>

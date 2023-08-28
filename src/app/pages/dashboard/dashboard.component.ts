@@ -4,12 +4,12 @@ import { first } from 'rxjs';
 import { Chart } from 'angular-highcharts';
 
 
-
 import { ContratInstitutionServiceService } from 'src/app/services/contratInstitution/contrat-institution-service.service';
 import { InstitutionServiceService } from 'src/app/services/institution/institution-service.service';
 import { LicenceClienteServiceService } from 'src/app/services/licenceService/licenceCliente/licence-cliente-service.service';
 import { ProduitServiceService } from 'src/app/services/produitService/produit-service.service';
 import { DynamicScriptLoaderService2 } from 'src/app/services/shared/dynamic-script-loader-service2.service';
+import { Statistique } from 'src/app/model/statistique';
 
 @Component({
   selector: 'app-dashboard',
@@ -33,23 +33,80 @@ export class DashboardComponent implements OnInit{
   listeInstitution!: any;
   listeContrat!: any;
   nbrLicence!: number;
+  countAg!: Statistique[]
+  libelleInst:string[] = []
+  tempNbrAgence:number[] =[]
+  nbrAgence: number[] = []
 
-  ngOnInit(){
+
+
+
+
+
+
+  ngOnInit() {
     this.loadScripts()
     const storedUser = localStorage.getItem('currentUser');
     this.currentUser = storedUser ? JSON.parse(storedUser) : {};
     this.countProduit()
     this.countInst()
     this.countContrat()
-    this.countLicence();
+    this.countLicence()
+    this.chartmaking()
+  }
 
-    // Créez un nouveau graphique Angular Highcharts
+  createChart(number: number[]){
+    this.chart2 = new Chart({
+      chart: {
+        type: 'spline', // Utilisez le type "spline" pour un graphique Spline
+        height: 350
+      },
+      title: {
+        text: 'Statistique des Institutions'
+      },
+      xAxis: {
+        categories: this.libelleInst
+      },
+      yAxis: {
+        title: {
+          text: 'Valeurs'
+        }
+      },
+      series: [
+        {
+          type: 'spline',
+          name: "Nombre d'agence",
+          color: '#87CEEB',
+          data: number
+        },
+        {
+          type: 'spline',
+          name: 'Nombre de Produit',
+          color: '#FFD700', // Couleur orange clair
+          data: [
+            47, 52, 44, 35, 58, 69, 32, 53
+          ]
+        },
+        {
+          type: 'spline',
+          name: 'Nombre de Licence',
+          color: '#FFA500', // Couleur orange
+          data: [
+            17, 22, 14, 25, 18, 19, 22, 43
+          ]
+        },
+      ],
+      credits: {
+        enabled: false
+      }
+    });
+
     this.chart = new Chart({
       chart: {
         type: 'bar', // Type de graphique (barres)
       },
       title: {
-        text: 'Exemple de graphique Angular Highcharts',
+        text: 'Nombre de Contrat Par mois',
       },
       xAxis: {
         categories: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai'], // Catégories de l'axe X
@@ -68,37 +125,28 @@ export class DashboardComponent implements OnInit{
       ],
     });
 
-    this.chart2 = new Chart({
-      chart: {
-        type: 'column', // Type de graphique (barres)
+
+
+
+  }
+
+  chartmaking(){
+    this.institutionService.countWithAgence().pipe(first()).subscribe({
+      next: data=>{
+        this.countAg = data;
+        this.countAg.forEach(value=>{
+          this.libelleInst.push(value.libelle)
+          this.tempNbrAgence.push(value.nombre)
+        })
+        this.nbrAgence = this.tempNbrAgence.slice(0,9);
+
+        console.log("this.nbrAgence")
+        console.log(this.nbrAgence)
+
       },
-      title: {
-        text: 'Exemple de graphique Angular Highcharts',
-      },
-      xAxis: {
-        categories: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai'], // Catégories de l'axe X
-      },
-      yAxis: {
-        title: {
-          text: 'Valeurs',
-        },
-      },
-      series: [
-        {
-          type: 'line',
-          name: 'Série 1', // Nom de la série de données
-          data: [10, 25, 15, 30, 20], // Données de la série
-          
-        },
-      ],
-    });
-
-
-
-
-
-
-
+      error: error=>console.log(error)
+    })
+  //  this.createChart([2,4,3,7,6,4,6,3,7]);
 
   }
 
@@ -195,6 +243,16 @@ export class DashboardComponent implements OnInit{
       enabled: false
     }
  });*/
+/*
+ download(){
+
+  const texte = "One\nTwo\nThree\nFour"
+ this.syncWriteFile('edmond.edith', texte);
+
+  // fs.writeFile(file, texte);
+
+
+ }*/
 
   private loadScripts() {
     // You can load multiple scripts by just providing the key as argument into load method of the service
@@ -229,9 +287,25 @@ export class DashboardComponent implements OnInit{
       // Script Loaded Successfully
     }).catch(error => console.log(error));
   }
+/*
+  async syncWriteFile(filename: string, data: any)  {
+    const repertoire = "/";
+    const file = repertoire + filename;
+    console.log("En cours" + file);
+    // fs.open(file,'w');
+    // fs.writeFile(file, data);
 
+    try {
+      await access('/etc/passwd', constants.R_OK | constants.W_OK);
+      console.log('can access');
+    } catch {
+      console.error('cannot access');
+    }
+  }*/
 
 }
+
+
 
 
 

@@ -3,6 +3,7 @@ import { FormGroup,FormBuilder, Validators, NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs';
 import { Profil } from 'src/app/model/Profil';
+import { ProfilRequest } from 'src/app/model/ProfilRequest';
 import { Habilitation } from 'src/app/model/habilitation';
 import { ProfilServiceService } from 'src/app/services/profilService/profil-service.service';
 import { DynamicScriptLoaderService3 } from 'src/app/services/shared/dynamic-script-loader-service3.service';
@@ -50,13 +51,17 @@ export class GestionProfilComponent implements OnInit{
   }
 
   envoyer(): any{
-    const data : Profil = Object.assign({}, this.formProfil.value)
+    const data : ProfilRequest = Object.assign({}, this.formProfil.value)
     this.profilService.save(data).pipe(first()).subscribe({
-      next: ()=>{
+      next: (data)=>{
+        this.liste
+        this.initForm
         Swal.fire("Reussie", "Enregistrement éffectué avec succès","success")
       },
       error: (error)=>{
-        Swal.fire("Echec","Enregistrement non abouti","error")
+        this.initForm
+        console.log(error)
+        Swal.fire("Echec",error.error.message,"error")
       }
     })
   }
@@ -64,7 +69,6 @@ export class GestionProfilComponent implements OnInit{
   liste(){
     this.profilService.getAll().pipe(first()).subscribe({
       next: data =>{
-        console.log(data)
         this.listeProfil = data;
       },
       error: error=> console.log(error)
